@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZBI_OOB_FIX_TOOL_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="OobTooldata" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="VKONTO"/>
+                    <PropertyRef Name="PRINTDOC"/>
+                </Key>
+                <Property Name="PullCode" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Man. OS invoic." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Updated" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Updated" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Validated" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Validated" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="VKONTO" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Contract Acct" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Aenam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Changed By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Released" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Released" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PRINTDOC" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Print document" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Reversed" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Reversed" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Aedat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Changed On" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PRINT_DATE" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Changed On" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AMOUNT_DUE" Type="Edm.Decimal" Precision="14" Scale="3" sap:unicode="false" sap:label="Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Status" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="OOB_AMOUNT" Type="Edm.Decimal" Precision="14" Scale="3" sap:unicode="false" sap:label="Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Reason" Type="Edm.String" Nullable="false" MaxLength="250" sap:unicode="false" sap:label="Reason" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CustomerName" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Name 2" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AmountCalc" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:label="Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BatchId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Batch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="NAVDATAFIX" Relationship="ZBI_OOB_FIX_TOOL_SRV.FixInv_ToolData" FromRole="FromRole_FixInv_ToolData" ToRole="ToRole_FixInv_ToolData"/>
+            </EntityType>
+            <EntityType Name="OobFixInvXML" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SCREEN_FIELD"/>
+                </Key>
+                <Property Name="SCREEN_FIELD" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="SCREEN_FIELD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="AMOUNT" Type="Edm.String" Nullable="false" MaxLength="13" sap:unicode="false" sap:label="AMOUNT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="InvoiceHeader" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="InvoiceNumber"/>
+                    <PropertyRef Name="Vkonto"/>
+                </Key>
+                <Property Name="BbpPlan" Type="ZBI_OOB_FIX_TOOL_SRV.BbpPlan" Nullable="false"/>
+                <Property Name="SupressMail" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Supress mail" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="UserAction" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="User Action Save or Validate" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InvoiceNumber" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Print document" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MsgTxt" Type="Edm.String" Nullable="false" MaxLength="1500" sap:unicode="false" sap:label="Message text box" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InvoiceTotal" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Invoice header" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InvoiceTotalCalc" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Invoice Total" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Vkonto" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Contract Acct" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="InvoiceItem" Relationship="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_InvoiceItem" FromRole="FromRole_InvoiceHeader_InvoiceItem" ToRole="ToRole_InvoiceHeader_InvoiceItem"/>
+                <NavigationProperty Name="MISCELLANEOUS_CHG" Relationship="ZBI_OOB_FIX_TOOL_SRV.MISCELLANEOUS_charges" FromRole="FromRole_MISCELLANEOUS_charges" ToRole="ToRole_MISCELLANEOUS_charges"/>
+                <NavigationProperty Name="MESSAGE" Relationship="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_Message" FromRole="FromRole_InvoiceHeader_Message" ToRole="ToRole_InvoiceHeader_Message"/>
+            </EntityType>
+            <EntityType Name="InvoiceItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ContractAccountId"/>
+                    <PropertyRef Name="Sequence"/>
+                </Key>
+                <Property Name="AddField" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Add check box" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FieldId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="screen field id" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ChargeType" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Charge Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ContractAccountId" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Contract Acct" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Sequence" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Sequence" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Remove" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Remove check box" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ScreenField" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="field" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Amount" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2" sap:unicode="false" sap:label="Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="InvoiceHeaderSet01" Relationship="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_InvoiceItem" FromRole="ToRole_InvoiceHeader_InvoiceItem" ToRole="FromRole_InvoiceHeader_InvoiceItem"/>
+            </EntityType>
+            <EntityType Name="MessageItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Var1"/>
+                </Key>
+                <Property Name="Remove" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Remove" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Var1" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Var1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Var2" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Var2" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Message" Type="Edm.String" Nullable="false" MaxLength="500" sap:unicode="false" sap:label="Message" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="InvoiceHeaderSet" Relationship="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_Message" FromRole="ToRole_InvoiceHeader_Message" ToRole="FromRole_InvoiceHeader_Message"/>
+            </EntityType>
+            <EntityType Name="Pull_list" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BatchId"/>
+                </Key>
+                <Property Name="BatchId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Batch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InputCheck" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="INPUT_CHECK" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="InvoiceNo" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Print document" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ContractAcc" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Contract Acct" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="Dummy_pull_list_mail" Relationship="ZBI_OOB_FIX_TOOL_SRV.Dummy_pull_mail" FromRole="ToRole_Dummy_pull_mail" ToRole="FromRole_Dummy_pull_mail"/>
+            </EntityType>
+            <EntityType Name="MiscChargeDesc" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Field_id"/>
+                </Key>
+                <Property Name="Field_id" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="field_id" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MiscCharge" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Misc_charge" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="SummaryItemDD" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="FIELD_ID"/>
+                </Key>
+                <Property Name="FIELD_ID" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="FIELD_ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SCREEN_FIELD" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="SCREEN_FIELD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Dummy_pull_list_mail" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BatchId"/>
+                </Key>
+                <Property Name="MSG_TXT" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="c" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BatchId" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="BATCHID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="Pull_listSet" Relationship="ZBI_OOB_FIX_TOOL_SRV.Dummy_pull_mail" FromRole="FromRole_Dummy_pull_mail" ToRole="ToRole_Dummy_pull_mail"/>
+            </EntityType>
+            <EntityType Name="DefBatchId" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BatchId"/>
+                </Key>
+                <Property Name="BatchId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Batch" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <ComplexType Name="BbpPlan">
+                <Property Name="BbpAmount" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2" sap:label="BBP Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BbToDate" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2" sap:label="Budget billing date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ActualCostDt" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2" sap:label="Actual Cost Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="UnbilBudgetBal" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2" sap:label="Unbil BUdget Balance" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
+            <Association Name="InvoiceHeader_InvoiceItem" sap:content-version="1">
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader" Multiplicity="1" Role="FromRole_InvoiceHeader_InvoiceItem"/>
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.InvoiceItem" Multiplicity="*" Role="ToRole_InvoiceHeader_InvoiceItem"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_InvoiceHeader_InvoiceItem">
+                        <PropertyRef Name="Vkonto"/>
+                    </Principal>
+                    <Dependent Role="ToRole_InvoiceHeader_InvoiceItem">
+                        <PropertyRef Name="ContractAccountId"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="MISCELLANEOUS_charges" sap:content-version="1">
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader" Multiplicity="*" Role="FromRole_MISCELLANEOUS_charges"/>
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.InvoiceItem" Multiplicity="*" Role="ToRole_MISCELLANEOUS_charges"/>
+            </Association>
+            <Association Name="InvoiceHeader_Message" sap:content-version="1">
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader" Multiplicity="*" Role="FromRole_InvoiceHeader_Message"/>
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.MessageItem" Multiplicity="*" Role="ToRole_InvoiceHeader_Message"/>
+            </Association>
+            <Association Name="Dummy_pull_mail" sap:content-version="1">
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.Dummy_pull_list_mail" Multiplicity="1" Role="FromRole_Dummy_pull_mail"/>
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.Pull_list" Multiplicity="*" Role="ToRole_Dummy_pull_mail"/>
+            </Association>
+            <Association Name="FixInv_ToolData" sap:content-version="1">
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.OobTooldata" Multiplicity="1" Role="FromRole_FixInv_ToolData"/>
+                <End Type="ZBI_OOB_FIX_TOOL_SRV.OobFixInvXML" Multiplicity="*" Role="ToRole_FixInv_ToolData"/>
+            </Association>
+            <EntityContainer Name="ZBI_OOB_FIX_TOOL_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="InvoiceHeaderSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="InvoiceItemSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.InvoiceItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="MessageItemSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.MessageItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="Pull_listSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.Pull_list" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="MiscChargeDescSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.MiscChargeDesc" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="SummaryItemDDSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.SummaryItemDD" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="Dummy_pull_list_mailSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.Dummy_pull_list_mail" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="DefBatchIdSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.DefBatchId" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="OobTooldataSet" EntityType="ZBI_OOB_FIX_TOOL_SRV.OobTooldata" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="OobFixInvXMLS" EntityType="ZBI_OOB_FIX_TOOL_SRV.OobFixInvXML" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="Dummy_pull_mailSet" Association="ZBI_OOB_FIX_TOOL_SRV.Dummy_pull_mail" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="Dummy_pull_list_mailSet" Role="FromRole_Dummy_pull_mail"/>
+                    <End EntitySet="Pull_listSet" Role="ToRole_Dummy_pull_mail"/>
+                </AssociationSet>
+                <AssociationSet Name="FixInv_ToolDataSet" Association="ZBI_OOB_FIX_TOOL_SRV.FixInv_ToolData" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="OobTooldataSet" Role="FromRole_FixInv_ToolData"/>
+                    <End EntitySet="OobFixInvXMLS" Role="ToRole_FixInv_ToolData"/>
+                </AssociationSet>
+                <AssociationSet Name="InvoiceHeader_InvoiceItemSet" Association="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_InvoiceItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="InvoiceHeaderSet" Role="FromRole_InvoiceHeader_InvoiceItem"/>
+                    <End EntitySet="InvoiceItemSet" Role="ToRole_InvoiceHeader_InvoiceItem"/>
+                </AssociationSet>
+                <AssociationSet Name="MISCELLANEOUS_chargesSet" Association="ZBI_OOB_FIX_TOOL_SRV.MISCELLANEOUS_charges" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="InvoiceHeaderSet" Role="FromRole_MISCELLANEOUS_charges"/>
+                    <End EntitySet="InvoiceItemSet" Role="ToRole_MISCELLANEOUS_charges"/>
+                </AssociationSet>
+                <AssociationSet Name="InvoiceHeader_MessageSet" Association="ZBI_OOB_FIX_TOOL_SRV.InvoiceHeader_Message" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="InvoiceHeaderSet" Role="FromRole_InvoiceHeader_Message"/>
+                    <End EntitySet="MessageItemSet" Role="ToRole_InvoiceHeader_Message"/>
+                </AssociationSet>
+                <FunctionImport Name="GetFixInvData" ReturnType="Collection(ZBI_OOB_FIX_TOOL_SRV.OobFixInvXML)" EntitySet="OobFixInvXMLS" m:HttpMethod="GET" sap:action-for="ZBI_OOB_FIX_TOOL_SRV.OobFixInvXML">
+                    <Parameter Name="BatchId" Type="Edm.String" Mode="In" MaxLength="10"/>
+                </FunctionImport>
+                <FunctionImport Name="Default_BatchId" ReturnType="ZBI_OOB_FIX_TOOL_SRV.DefBatchId" EntitySet="DefBatchIdSet" m:HttpMethod="GET"/>
+            </EntityContainer>
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <atom:link rel="self" href="http://sapsdvapp.aws.londonhydro.cloud:8000/sap/opu/odata/sap/ZBI_OOB_FIX_TOOL_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://sapsdvapp.aws.londonhydro.cloud:8000/sap/opu/odata/sap/ZBI_OOB_FIX_TOOL_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
