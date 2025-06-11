@@ -8,12 +8,11 @@
     "sapui5"
   ],
   "main": "webapp/index.html",
-  "dependencies": {},
   "devDependencies": {
-    "@ui5/cli": "^3.0.0",
-    "@sap/ux-ui5-tooling": "1",
     "@sap-ux/ui5-middleware-fe-mockserver": "2",
-    "rimraf": "^5.0.5"
+    "@sap/ux-ui5-tooling": "1",
+    "@ui5/cli": "^4.0.18",
+    "rimraf": "^6.0.1"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-client=200&sap-ui-xx-viewCache=false#comsaplhmrzlhoobfix-display\"",

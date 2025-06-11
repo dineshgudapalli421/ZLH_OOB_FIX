@@ -1,0 +1,47 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:m="sap.m"
+    xmlns:mdc="sap.ui.mdc"
+>
+    <fb:FilterBar
+        id="filterbar"
+        persistencyKey="myPersKey"
+        useToolbar="false"
+        search=".onSearch"
+        filterChange=".onFilterChange"
+        afterVariantLoad=".onAfterVariantLoad"
+    >
+        <fb:filterGroupItems>
+            <fb:FilterGroupItem
+                name="Name"
+                label="Batch ID"
+                groupName="Group1"
+                visibleInFilterBar="true"
+            >
+                <fb:control>
+                    <m:SearchField
+                        id="idBatchIdInput"
+                        value="{SelectionModel>/sBatchId}"
+                        placeholder="Batch ID"
+                        search="onSubmitBatchId"
+                        width="25%"
+                    />
+                </fb:control>
+            </fb:FilterGroupItem>
+            <fb:FilterGroupItem
+                name="Date"
+                label="Date"
+                groupName="Group1"
+                visibleInFilterBar="true"
+            >
+                <fb:control>
+                    <m:DatePicker
+                        id="idDateInput"
+                        value="{path:'SelectionModel>/oInvoiceDate', type: 'sap.ui.model.odata.type.Date'}"
+                    />
+                </fb:control>
+            </fb:FilterGroupItem>
+        </fb:filterGroupItems>
+    </fb:FilterBar>
+</core:FragmentDefinition>

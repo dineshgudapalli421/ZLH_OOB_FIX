@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <TextArea
+        id="idActionLogLongText"
+        value="{OOBFixModel>/sLongText}"
+        growing="true"
+        growingMaxLines="7"
+        width="100%"
+        editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+    />
+</core:FragmentDefinition>

@@ -1,0 +1,82 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+>
+    <Table
+        id="idTableSummaryItems"
+        rows="{OOBFixModel>/SummCharges}"
+        ariaLabelledBy="title"
+        visibleRowCount="9"
+        showHeader="false"
+        selectionMode="Single"
+    >
+        <columns>
+            <Column width="3rem">
+                <m:Label text="S.No" />
+                <template>
+                    <m:Text
+                        text="{OOBFixModel>Sequence}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column width="16rem">
+                <m:Label text="Items" />
+                <template>
+                    <!-- <m:Label text="{OOBFixModel>ScreenField}" /> -->
+                    <m:Select
+                        enabled="{/Enabled}"
+                        editable="{OOBFixModel>Editable}"
+                        forceSelection="false"
+                        selectedKey="{OOBFixModel>FieldId}"
+                        change="onChangeSummaryItem"
+                        items="{
+                            path: 'OOBFixModel>/aSummaryItemsList'
+                        }"
+                    >
+                        <core:Item
+                            key="{OOBFixModel>FIELD_ID}"
+                            text="{OOBFixModel>SCREEN_FIELD}"
+                            enabled="{OOBFixModel>IsbEnable}"
+                        />
+                    </m:Select>
+                </template>
+            </Column>
+            <Column
+                width="7rem"
+                hAlign="End"
+            >
+                <m:Label text="Amount" />
+                <template>
+                    <m:Input
+                        textAlign="End"
+                        value="{path:'OOBFixModel>Amount',formatter:'.formatter.Currency' }"
+                        change="onChangeSummaryPrices"
+                        editable="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                    />
+                </template>
+            </Column>
+            <!-- <Column
+                width="4rem"
+                hAlign="Center"
+            >
+                <m:Label text="Remove" />
+                <template>
+                    <m:CheckBox selected="{OOBFixModel>Remove}" />
+                </template>
+            </Column>
+            <Column
+                width="4rem"
+                hAlign="Center"
+            >
+                <m:Label text="Add" />
+                <template>
+                    <m:CheckBox selected="{OOBFixModel>AddField}" />
+                </template>
+            </Column>-->
+        </columns>
+    </Table>
+</core:FragmentDefinition>

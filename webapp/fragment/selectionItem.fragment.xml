@@ -1,0 +1,243 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+>
+    <Table
+        id="idTableInvoices"
+        rows="{
+                    path: '/OobTooldataSet'
+                }"
+        threshold="15"
+        enableBusyIndicator="true"
+        ariaLabelledBy="title"
+        selectionMode="Single"
+        noDataText="Please enter either print date or batch ID to proceed"
+    >
+        <extension>
+            <m:OverflowToolbar
+                style="Standard"
+                width="100%"
+            >
+                <m:Title
+                    id="title"
+                    text="Invoice List"
+                />
+                <m:ToolbarSpacer />
+
+                <m:Button
+                    text="Proceed"
+                    press="onPressNavigate"
+                    type="Emphasized"
+                    icon="sap-icon://accept"
+                />
+                <m:Button
+                    id="idReleaseBatchButton"
+                    text="Release Batch"
+                    press="onReleaseBatch"
+                    visible="{SelectionModel>/bReleaseBatchBtn}"
+                />
+                <m:Button
+                    id="idPullListButton"
+                    text="Pull List"
+                    press="_onPullList"
+                    visible="{SelectionModel>/bPullListBtn}"
+                />
+            </m:OverflowToolbar>
+        </extension>
+        <columns>
+            <Column
+                sortProperty="Name"
+                filterProperty="Name"
+                autoResizable="true"
+                width="3rem"
+            >
+                <m:Label text="Update" />
+                <template>
+                    <m:CheckBox
+                        selected="{= ${Updated}}"
+                        editable="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="Name"
+                filterProperty="Name"
+                autoResizable="true"
+                width="3rem"
+            >
+                <m:Label text="Validate" />
+                <template>
+                    <m:CheckBox
+                        selected="{= ${Validated}}"
+                        editable="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="Name"
+                filterProperty="Name"
+                autoResizable="true"
+                width="3rem"
+            >
+                <m:Label text="Reversed" />
+                <template>
+                    <m:CheckBox
+                        selected="{= ${Reversed}}"
+                        editable="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="Name"
+                filterProperty="Name"
+                autoResizable="true"
+                width="3rem"
+            >
+                <m:Label text="Release Batch" />
+                <template>
+                    <m:CheckBox
+                        selected="{= ${Released}}"
+                        editable="false"
+                    />
+                </template>
+            </Column>
+            <!-- <Column
+                        sortProperty="Name"
+                        filterProperty="Name"
+                        autoResizable="true"
+                        width="3rem"
+                    >
+                        <m:Label text="Reverse Validation" />
+                        <template>
+                            <m:CheckBox selected="{OOBFixModel>Checkbox}" />
+                        </template>
+                    </Column> -->
+            <Column
+                autoResizable="true"
+                width="6rem"
+                hAlign="Center"
+            >
+                <m:Label text="Batch ID" />
+                <template>
+                    <m:Text
+                        text="{BatchId}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="Name"
+                filterProperty="Name"
+                autoResizable="true"
+                hAlign="End"
+                width="7rem"
+            >
+                <m:Label text="Invoice" />
+                <template>
+                    <m:Text
+                        text="{PRINTDOC}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="ProductID"
+                filterProperty="ProductID"
+                autoResizable="true"
+                width="11rem"
+                hAlign="Center"
+            >
+                <m:Label text="Print dt" />
+                <template>
+                    <m:Text
+                        text="{path: 'PRINT_DATE', type: 'sap.ui.model.odata.type.Date'}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="Category"
+                filterProperty="Category"
+                autoResizable="true"
+                width="7rem"
+                hAlign="End"
+            >
+                <m:Label text="Total Amount" />
+                <template>
+                    <m:Text
+                        text="{path:'AMOUNT_DUE',formatter:'.formatter.Currency'}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                sortProperty="SupplierName"
+                filterProperty="SupplierName"
+                autoResizable="true"
+                width="7rem"
+                hAlign="End"
+            >
+                <m:Label text="Tot amt calc" />
+                <template>
+                    <m:Text
+                        text="{path:'AmountCalc',formatter:'.formatter.Currency'}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                filterProperty="Price"
+                width="7rem"
+                hAlign="End"
+            >
+                <m:Label text="Difference" />
+                <template>
+                    <m:Text
+                        text="{path:'OOB_AMOUNT',formatter:'.formatter.Currency'}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                hAlign="End"
+                autoResizable="true"
+                width="8rem"
+            >
+                <m:Label text="Contract Account" />
+                <template>
+                    <m:Text
+                        text="{VKONTO}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                autoResizable="true"
+                width="13rem"
+            >
+                <m:Label text="Customer name" />
+                <template>
+                    <m:Text
+                        text="{CustomerName}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+            <Column
+                autoResizable="true"
+                width="17rem"
+            >
+                <m:Label text="Reason" />
+                <template>
+                    <m:Text
+                        text="{Reason}"
+                        wrapping="false"
+                    />
+                </template>
+            </Column>
+        </columns>
+    </Table>
+</core:FragmentDefinition>

@@ -95,19 +95,36 @@
                     "target": [
                         "TargetOOBFixSel"
                     ]
+                },
+                {
+                    "name": "OOBFix",
+                    "pattern": "OOBView/{invoice}/{contractAccount}/{Release}",
+                    "target": [
+                        "OOBFixToolView"
+                    ],
+                    "greedy": false,
+                    "constraints": {
+                        "invoice": "[0-9]+",
+                        "contractAccount": "[0-9]+"
+                    }
                 }
             ],
             "targets": {
                 "TargetOOBFixSel": {
                     "id": "OOBFixSel",
                     "name": "OOBFixSel"
+                },
+                "OOBFixToolView": {
+                    "id": "OOBFix",
+                    "name": "OOBFix"
                 }
             }
         },
         "rootView": {
             "viewName": "com.sap.lh.mr.zlhoobfix.view.App",
             "type": "XML",
-            "id": "App"
+            "id": "App",
+            "async": true
         }
     }
 }

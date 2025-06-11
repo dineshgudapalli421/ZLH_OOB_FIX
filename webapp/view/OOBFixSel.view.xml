@@ -1,6 +1,40 @@
 <mvc:View controllerName="com.sap.lh.mr.zlhoobfix.controller.OOBFixSel"
+    xmlns="sap.ui.table"
+    xmlns:plugins="sap.ui.table.plugins"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    </Page>
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:m="sap.m"
+    xmlns:f="sap.f">
+    <f:DynamicPage headerExpanded="{/headerExpanded}">
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+                    <c:Fragment
+                        fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionHeader"
+                        type="XML"
+                    />
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <c:Fragment
+                fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionItem"
+                type="XML"
+            />
+        </f:content>
+        <!-- <f:footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button
+                    type="Accept"
+                    text="Accept"
+                />
+                <Button
+                    type="Reject"
+                    text="Reject"
+                />
+            </OverflowToolbar>
+        </f:footer> -->
+    </f:DynamicPage>
 </mvc:View>

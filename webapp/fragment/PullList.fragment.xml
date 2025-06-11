@@ -1,0 +1,58 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        title="Pull List"
+        stretch="true"
+    >
+        <content>
+            <Table
+                id="pullListTable"
+                mode="SingleSelectMaster"
+                inset="false"
+                items="{SelectionModel>/aPullList}"
+            >
+                <columns>
+                    <Column>
+                        <Text text="Hold Print" />
+                    </Column>
+                    <Column>
+                        <Text text="Batch Id" />
+                    </Column>
+                    <Column>
+                        <Text text="Invoice" />
+                    </Column>
+                    <Column>
+                        <Text text="Contract Account" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <CheckBox
+                                select="{= ${SelectionModel>InputCheck}}"
+                            />
+                            <Text text="{SelectionModel>BatchId}" />
+                            <Text text="{SelectionModel>InvoiceNo}" />
+                            <Text text="{SelectionModel>ContractAcc}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button
+                    text="Close"
+                    press="onClosePullList"
+                />
+                <Button
+                    text="Submit"
+                    press="onSubmitPullList"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Dialog>
+</core:FragmentDefinition>

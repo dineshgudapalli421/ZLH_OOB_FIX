@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.ui.table"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.m"
+>
+    <Table
+        id="idMessageTable"
+        rows="{OOBFixModel>/Message}"
+        selectionMode="Single"
+        paste="onPaste"
+        ariaLabelledBy="title"
+        alternateRowColors="true"
+        visibleRowCount="1"
+    >
+        <columns>
+            <Column width="5rem">
+                <m:Label text="Var 1" />
+                <template>
+                    <m:Label text="{OOBFixModel>Var1}" />
+                </template>
+            </Column>
+            <Column width="5rem">
+                <m:Label text="Var 2" />
+                <template>
+                    <m:Label text="{OOBFixModel>Var2}" />
+                </template>
+            </Column>
+            <!-- <Column
+                width="5rem"
+                hAlign="End"
+            >
+                <m:Label text="remove" />
+                <template>
+                    <m:CheckBox selected="{OOBFixModel>Checkbox}" />
+                </template>
+            </Column> -->
+            <Column>
+                <m:Label
+                    text="Message"
+                    width="15rem"
+                />
+                <template>
+                    <m:Input
+                        value="{OOBFixModel>Message}"
+                        editable="false"
+                    />
+                </template>
+            </Column>
+        </columns>
+    </Table>
+</core:FragmentDefinition>

@@ -1,0 +1,60 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+>
+    <f:SimpleForm
+        id="SimpleFormChange480_12120Dual"
+        editable="false"
+        layout="ResponsiveGridLayout"
+        showHeader="false"
+        labelSpanXL="4"
+        labelSpanL="4"
+        labelSpanM="12"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="0"
+        emptySpanL="0"
+        emptySpanM="0"
+        emptySpanS="0"
+        columnsXL="2"
+        columnsL="2"
+        columnsM="2"
+        singleContainerFullSize="false"
+        class="sapUiFormM"
+    >
+        <f:content>
+            <core:Title />
+            <Label text="BBP Amount" />
+            <Input
+                value="{path:'OOBFixModel>/BBPPlan/BbpAmount',formatter:'.formatter.Currency'}"
+                change="onChangePropPricesBBPAmnt"
+                textAlign="End"
+                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+            />
+            <Label text="BB To Date" />
+            <Input
+                value="{path:'OOBFixModel>/BBPPlan/BbToDate', type: 'sap.ui.model.odata.type.Date'}"
+                change="onChangePropPricesBBTODate"
+                textAlign="End"
+                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+            />
+            <core:Title />
+            <Label text="Actual Cost to Date" />
+            <Input
+                value="{path:'OOBFixModel>/BBPPlan/ActualCostDt', type: 'sap.ui.model.odata.type.Date'}"
+                change="onChangePropPricesActCostDt"
+                textAlign="End"
+                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+            />
+            <Label text="Unbilled Budget Balance" />
+            <Input
+                value="{path:'OOBFixModel>/BBPPlan/UnbilBudgetBal', formatter:'.formatter.Currency'}"
+                change="onChangePropPricesBugBal"
+                textAlign="End"
+                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+            />
+        </f:content>
+    </f:SimpleForm>
+</core:FragmentDefinition>
