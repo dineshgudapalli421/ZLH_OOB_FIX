@@ -30,9 +30,10 @@
                 <items>
                     <ColumnListItem>
                         <cells>
-                            <CheckBox
+                            <!-- <CheckBox
                                 select="{= ${SelectionModel>InputCheck}}"
-                            />
+                            /> -->
+                            <CheckBox selected="{SelectionModel>InputCheck}" />
                             <Text text="{SelectionModel>BatchId}" />
                             <Text text="{SelectionModel>InvoiceNo}" />
                             <Text text="{SelectionModel>ContractAcc}" />
