@@ -51,7 +51,8 @@ sap.ui.define([
                 oInvoiceDate: '', //new Date()
                 aPullList: [],
                 bReleaseBatchBtn: false,
-                bPullListBtn: false
+                bPullListBtn: false,
+                InputCheck: false
             });
             oController.getView().setModel(oSelectionModel, "SelectionModel");
             oController._fndefaultBatch();
