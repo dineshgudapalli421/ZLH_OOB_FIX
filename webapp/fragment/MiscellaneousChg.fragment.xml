@@ -35,7 +35,7 @@
                         selectedKey="{OOBFixModel>FieldId}"
                         change="onChangeMiscCharg"
                         items="{
-							path: '/MiscChargeDescSet'
+							path: '/MiscChargeDescSet', length : 150 
 						}"
                     >
                         <core:Item
