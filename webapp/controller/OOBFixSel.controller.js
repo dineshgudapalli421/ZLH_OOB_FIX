@@ -148,15 +148,11 @@ sap.ui.define([
         },
 
         _onPullList: function () {
-            var oTable = this.getView().byId("idTableInvoices");
-            var oContexts = oTable.getBinding('rows').getContexts();
-            if (oContexts.length > 0) {
-                var sPath = oContexts[0].getPath();
-                var oData = oContexts[0].getModel().getProperty(sPath);
-
-                // Display BatchId information before proceeding
-                // var sBatchId = oData.BatchId;
-                var sBatchID = oData.BatchId;//'15'; //oData.BatchId //
+            var oSelectionModel = oController.getView().getModel("SelectionModel");
+            var sDate = oSelectionModel.getProperty("/oInvoiceDate");
+            var sBatchID = oSelectionModel.getProperty("/sBatchId");
+            
+            if (sBatchID) {
                 oDataModel.read("/Pull_listSet", {
                     filters: [new Filter("BatchId", FilterOperator.EQ, sBatchID)],
                     success: function (oData) {
@@ -178,6 +174,35 @@ sap.ui.define([
                     }
                 });
             }
+
+            // if (oContexts.length > 0) {
+            //     var sPath = oContexts[0].getPath();
+            //     var oData = oContexts[0].getModel().getProperty(sPath);
+
+            //     // Display BatchId information before proceeding
+            //     // var sBatchId = oData.BatchId;
+            //     var sBatchID = oData.BatchId;//'15'; //oData.BatchId //
+            //     oDataModel.read("/Pull_listSet", {
+            //         filters: [new Filter("BatchId", FilterOperator.EQ, sBatchID)],
+            //         success: function (oData) {
+            //             oController.getView().getModel("SelectionModel").setProperty("/aPullList", oData.results);
+            //             oController._fnOpenPullList();
+            //         },
+            //         error: function (oError) {
+            //             var oMessage;
+            //             if (oError.responseText.startsWith("<")) {
+            //                 var parser = new DOMParser();
+            //                 var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
+            //                 oMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+            //             } else {
+            //                 var oResponseText = oError.responseText;
+            //                 var sParsedResponse = JSON.parse(oResponseText);
+            //                 oMessage = sParsedResponse.error.message.value;
+            //             }
+            //             MessageBox.error(oMessage);
+            //         }
+            //     });
+            // }
         },
         _fnOpenPullList: function () {
             var oView = this.getView();
