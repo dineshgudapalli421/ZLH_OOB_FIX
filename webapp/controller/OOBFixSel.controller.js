@@ -151,7 +151,7 @@ sap.ui.define([
             var oSelectionModel = oController.getView().getModel("SelectionModel");
             var sDate = oSelectionModel.getProperty("/oInvoiceDate");
             var sBatchID = oSelectionModel.getProperty("/sBatchId");
-            
+
             if (sBatchID) {
                 oDataModel.read("/Pull_listSet", {
                     filters: [new Filter("BatchId", FilterOperator.EQ, sBatchID)],
