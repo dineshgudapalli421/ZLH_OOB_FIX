@@ -90,7 +90,7 @@ sap.ui.define([
 
                         var oModel = oController.getView().getModel("OOBFixModel");
                         var Misce = oData.InvoiceItem.results.filter(function (item) {
-                            return item.ChargeType === "MISC";
+                            return item.ChargeType === "Misc";
                         });
                         var SummCharges = oData.InvoiceItem.results.filter(function (item) {
                             return item.ChargeType === "SUMM";
@@ -444,7 +444,7 @@ sap.ui.define([
                 success: function (oData) {
 
                     var Misce = oData.InvoiceItem.results.filter(function (item) {
-                        return item.ChargeType === "MISC";
+                        return item.ChargeType === "Misc";
                     });
                     var SummCharges = oData.InvoiceItem.results.filter(function (item) {
                         return item.ChargeType === "SUMM";
