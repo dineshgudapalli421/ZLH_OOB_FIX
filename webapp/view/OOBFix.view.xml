@@ -15,6 +15,11 @@
         <customHeader>
             <Toolbar>
                 <Label
+                    text="{OOBFixModel>/oView/ContractAccount}"
+                    design="Bold"
+                    class="sapUiSmallMargin"
+                />
+                <Label
                     text="{OOBFixModel>/oView/InvoiceNumber}"
                     design="Bold"
                     class="sapUiSmallMargin"

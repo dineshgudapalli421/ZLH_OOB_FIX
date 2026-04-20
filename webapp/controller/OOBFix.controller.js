@@ -21,7 +21,7 @@ sap.ui.define([
         },
 
         _onRouteMatched: function (oEvent) {
-            
+            debugger;
             var sRouteName = oEvent.getParameter("name");
             var oArguments = oEvent.getParameter("arguments");
             oController.sInvoiceNumber = oArguments.invoice;
@@ -37,7 +37,7 @@ sap.ui.define([
             // oController._getServices(oController.sInvoiceNumber, oController.sAccountNumber);
             // SummaryItemDDSet
         },
-        _getSummaryItems: function () {
+        _getSummaryItems: function () {           
             return new Promise((resolve, reject) => {
                 debugger;
                 var oModel = oController.getView().getModel("OOBFixModel");
@@ -74,6 +74,7 @@ sap.ui.define([
             oController.getView().setModel(oModel, "OOBFixModel");
         },
         _getServices: function (sInvNumber, sAccNumber, bIsReload, IsReversed) {
+            debugger;
             var sInvoiceNumber = sInvNumber;//
             var sAccountNumber = sAccNumber//'5810959'; //sAccNumber;//
             var oModel = oController.getView().getModel("OOBFixModel");
@@ -114,6 +115,7 @@ sap.ui.define([
                         oModel.setProperty("/SummCharges", SummCharges);
                         oModel.setProperty("/BBPPlan", oData.BbpPlan);
                         oModel.setProperty("/sLongText", oData.MsgTxt);
+                        oModel.setProperty("/oView/ContractAccount", "Contract Account : " + sAccountNumber);
                         oModel.setProperty("/oView/InvoiceNumber", "Invoice# : " + oData.InvoiceNumber);
                         oModel.setProperty("/oView/InvoiceTotal", "Invoice Total(Head) : " + oData.InvoiceTotal);
                         oModel.setProperty("/oView/InvoiceTotalCalc", "Invoice Total(Calc) : " + oData.InvoiceTotalCalc);
@@ -468,6 +470,7 @@ sap.ui.define([
                     oModel.setProperty("/SummCharges", SummCharges);
                     oModel.setProperty("/BBPPlan", oData.BbpPlan);
                     // oModel.setProperty("/sLongText", oData.MsgTxt);
+                    oModel.setProperty("/oView/ContractAccount", "Contract Account : " + oController.sAccountNumber);
                     oModel.setProperty("/oView/InvoiceNumber", "Invoice# : " + oData.InvoiceNumber);
                     oModel.setProperty("/oView/InvoiceTotal", "Invoice Total(Head) : " + oData.InvoiceTotal);
                     oModel.setProperty("/oView/InvoiceTotalCalc", "Invoice Total(Calc) : " + oData.InvoiceTotalCalc);
@@ -496,6 +499,7 @@ sap.ui.define([
             });
         },
         _getPayload: function (sUserAction) {
+            debugger;
             var oModel = oController.getView().getModel("OOBFixModel");
             var invoiceItems = oModel.getProperty("/oView/InvoiceItem");
             var messages = oModel.getProperty("/oView/MESSAGE");
@@ -504,22 +508,24 @@ sap.ui.define([
                 AddField: Boolean(item.AddField)
             }));
             var SummCharges = oModel.getProperty("/SummCharges").map(item => {
+                item.Amount = item.Amount === '' ? '0.00' : parseFloat(item.Amount).toString();
+                
                 const { Editable, ...rest } = item;
                 return {
                     ...rest,
                     AddField: Boolean(rest.AddField)
                 };
             });
-            debugger;
-            const oInvoiceTotal= oController.getView().byId("idInvoiceTotal").getText().split(": ")[1].trim();
-            const oInvoiceTotalCalc= oController.getView().byId("idInvoiceTotalCalc").getText().split(": ")[1].trim();
-            
+
+            const oInvoiceTotal = oController.getView().byId("idInvoiceTotal").getText().split(": ")[1].trim();
+            const oInvoiceTotalCalc = oController.getView().byId("idInvoiceTotalCalc").getText().split(": ")[1].trim();
+
             var BBPPlan = oModel.getProperty("/BBPPlan");
             var sLongText = oModel.getProperty("/sLongText");
             var SupressMail = oModel.getProperty("/bIsSuppressMail");
             var payload = {
                 InvoiceTotal: oInvoiceTotal,
-                InvoiceTotalCalc : oInvoiceTotalCalc,
+                InvoiceTotalCalc: oInvoiceTotalCalc,
                 Vkonto: oController.sAccountNumber,//"5810959",
                 InvoiceNumber: oController.sInvoiceNumber,//oModel.getProperty("/oView/InvoiceNumber").invoiceNumber.split(": ")[1],//"100003395",
                 UserAction: sUserAction,

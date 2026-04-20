@@ -11,10 +11,10 @@ sap.ui.define([
     return Controller.extend("com.sap.lh.mr.zlhoobfix.controller.OOBFixSel", {
         formatter: formatter,
         onInit() {
-            debugger;
             oController = this;
             oRouter = oController.getOwnerComponent().getRouter();
             oDataModel = oController.getOwnerComponent().getModel();
+           // oController.getView().setModel(oDataModel, "BatchModel");
             oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
                 var oTable = oController.getView().byId("idTableInvoices");
@@ -250,6 +250,7 @@ sap.ui.define([
             // oController._refreshList();
         },
         onSearch: function () {
+            debugger;
             var oBatchIdInput = this.getView().byId("idBatchIdInput");
             var oDateInput = this.getView().byId("idDateInput");
             if (!oBatchIdInput.getValue() && !oDateInput.getValue()) {

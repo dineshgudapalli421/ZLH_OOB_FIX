@@ -4,7 +4,24 @@
     xmlns:u="sap.ui.unified"
     xmlns:core="sap.ui.core"
     xmlns:m="sap.m"
+    xmlns:smarttable="sap.ui.comp.smarttable"
+    height="100%"
 >
+<!-- <smarttable:SmartTable 
+    id="oobSmartTable"
+    entitySet="OOBToolSet"
+    tableBindingPath="/OobTooldataSet"
+    tableType="ResponsiveTable"
+    useVariantManagement="false"
+    useTablePersonalisation="true"
+    header="OOB Invoices"
+    showRowCount="false"
+    enableAutoBinding="true"
+    enableExport="false"
+    demandPopin="true"
+    persistencyKey="SmartTableSoFormOOB"
+    requestAtLeastFields="Updated,Validated,Reversed,Released,BatchId,PRINTDOC,PRINT_DATE,AMOUNT_DUE,AmountCalc,OOB_AMOUNT,VKONTO,CustomerName,Reason"
+> -->
     <Table
         id="idTableInvoices"
         rows="{
@@ -49,10 +66,8 @@
         </extension>
         <columns>
             <Column
-                sortProperty="Name"
-                filterProperty="Name"
                 autoResizable="true"
-                width="3rem"
+                width="5rem"
             >
                 <m:Label text="Update" />
                 <template>
@@ -63,10 +78,8 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Name"
-                filterProperty="Name"
                 autoResizable="true"
-                width="3rem"
+                width="5rem"
             >
                 <m:Label text="Validate" />
                 <template>
@@ -76,11 +89,9 @@
                     />
                 </template>
             </Column>
-            <Column
-                sortProperty="Name"
-                filterProperty="Name"
+            <Column                
                 autoResizable="true"
-                width="3rem"
+                width="5rem"
             >
                 <m:Label text="Reversed" />
                 <template>
@@ -91,10 +102,8 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Name"
-                filterProperty="Name"
                 autoResizable="true"
-                width="3rem"
+                width="5rem"
             >
                 <m:Label text="Release Batch" />
                 <template>
@@ -129,8 +138,7 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Name"
-                filterProperty="Name"
+                sortProperty="PRINTDOC"
                 autoResizable="true"
                 hAlign="End"
                 width="7rem"
@@ -144,8 +152,7 @@
                 </template>
             </Column>
             <Column
-                sortProperty="ProductID"
-                filterProperty="ProductID"
+                sortProperty="PRINT_DATE"
                 autoResizable="true"
                 width="11rem"
                 hAlign="Center"
@@ -159,8 +166,7 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Category"
-                filterProperty="Category"
+                sortProperty="AMOUNT_DUE"
                 autoResizable="true"
                 width="7rem"
                 hAlign="End"
@@ -174,8 +180,7 @@
                 </template>
             </Column>
             <Column
-                sortProperty="SupplierName"
-                filterProperty="SupplierName"
+                sortProperty="AmountCalc"
                 autoResizable="true"
                 width="7rem"
                 hAlign="End"
@@ -189,7 +194,8 @@
                 </template>
             </Column>
             <Column
-                filterProperty="Price"
+            sortProperty="OOB_AMOUNT"
+                autoResizable="true"
                 width="7rem"
                 hAlign="End"
             >
@@ -203,6 +209,7 @@
             </Column>
             <Column
                 hAlign="End"
+                sortProperty="VKONTO"
                 autoResizable="true"
                 width="8rem"
             >
@@ -215,6 +222,7 @@
                 </template>
             </Column>
             <Column
+                sortProperty="CustomerName"
                 autoResizable="true"
                 width="13rem"
             >
@@ -227,8 +235,9 @@
                 </template>
             </Column>
             <Column
+                sortProperty="Reason"
                 autoResizable="true"
-                width="17rem"
+                width="40rem"
             >
                 <m:Label text="Reason" />
                 <template>
@@ -240,4 +249,5 @@
             </Column>
         </columns>
     </Table>
+    <!-- </smarttable:SmartTable> -->
 </core:FragmentDefinition>

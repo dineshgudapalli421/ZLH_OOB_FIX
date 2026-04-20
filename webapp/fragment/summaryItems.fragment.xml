@@ -55,7 +55,7 @@
                         textAlign="End"
                         value="{path:'OOBFixModel>Amount',formatter:'.formatter.Currency' }"
                         change="onChangeSummaryPrices"
-                        editable="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                        editable="{= ${OOBFixModel>/IsReleased} !== 'true' &amp;&amp; ${OOBFixModel>/SummCharges/ScreenField} !== 'Total Amount Due'}"
                     />
                 </template>
             </Column>
