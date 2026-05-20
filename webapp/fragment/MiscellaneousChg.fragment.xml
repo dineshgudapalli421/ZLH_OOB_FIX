@@ -11,21 +11,22 @@
         selectionMode="Single"
         paste="onPaste"
         ariaLabelledBy="title"
-        class="sapUiSizeCompact"
+        class="myCustomSmallTable"
         visibleRowCount="4"
     >
         <columns>
             <Column width="8rem">
-                <m:Label text="S.No" />
+                <m:Label text="S.No" class="customLabelFontSize"/>
                 <template>
                     <m:Text
                         text="{OOBFixModel>Sequence}"
                         wrapping="false"
+                        class="customTextFontSize"
                     />
                 </template>
             </Column>
             <Column width="17rem">
-                <m:Label text="Miscellaneous Charge Details" />
+                <m:Label text="Miscellaneous Charge Details" class="customLabelFontSize"/>
                 <template>
                     <!-- <m:Label text="{OOBFixModel>ScreenField}" /> -->
                     <m:Select
@@ -34,6 +35,7 @@
                         forceSelection="false"
                         selectedKey="{OOBFixModel>FieldId}"
                         change="onChangeMiscCharg"
+                        class="customSelectFontSize"
                         items="{
 							path: '/MiscChargeDescSet', length : 150 
 						}"
@@ -49,10 +51,11 @@
                 width="6rem"
                 hAlign="End"
             >
-                <m:Label text="Amount" />
+                <m:Label text="Amount" class="customLabelFontSize"/>
                 <template>
                     <m:Input
                         textAlign="End"
+                        class="customInputFontSize"
                         value="{path:'OOBFixModel>Amount',formatter:'.formatter.Currency' }"
                         change="onChangePrices"
                         editable="{= ${OOBFixModel>/IsReleased} !== 'true'}"

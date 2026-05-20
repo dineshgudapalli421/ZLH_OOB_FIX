@@ -12,19 +12,21 @@
         visibleRowCount="9"
         showHeader="false"
         selectionMode="Single"
+        class="myCustomSmallTable"
     >
         <columns>
             <Column width="3rem">
-                <m:Label text="S.No" />
+                <m:Label text="S.No" class="customLabelFontSize"/>
                 <template>
                     <m:Text
                         text="{OOBFixModel>Sequence}"
                         wrapping="false"
+                        class="customTextFontSize"
                     />
                 </template>
             </Column>
             <Column width="16rem">
-                <m:Label text="Items" />
+                <m:Label text="Items" class="customLabelFontSize"/>
                 <template>
                     <!-- <m:Label text="{OOBFixModel>ScreenField}" /> -->
                     <m:Select
@@ -32,6 +34,7 @@
                         editable="{OOBFixModel>Editable}"
                         forceSelection="false"
                         selectedKey="{OOBFixModel>FieldId}"
+                        class="customSelectFontSize"
                         change="onChangeSummaryItem"
                         items="{
                             path: 'OOBFixModel>/aSummaryItemsList'
@@ -49,10 +52,10 @@
                 width="7rem"
                 hAlign="End"
             >
-                <m:Label text="Amount" />
+                <m:Label text="Amount" class="customLabelFontSize"/>
                 <template>
                     <m:Input
-                        textAlign="End"
+                        textAlign="End" class="customInputFontSize"
                         value="{path:'OOBFixModel>Amount',formatter:'.formatter.Currency' }"
                         change="onChangeSummaryPrices"
                         editable="{= ${OOBFixModel>/IsReleased} !== 'true' &amp;&amp; ${OOBFixModel>/SummCharges/ScreenField} !== 'Total Amount Due'}"

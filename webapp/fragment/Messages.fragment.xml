@@ -12,19 +12,20 @@
         paste="onPaste"
         ariaLabelledBy="title"
         alternateRowColors="true"
+        class="myCustomSmallTable"
         visibleRowCount="1"
     >
         <columns>
             <Column width="5rem">
-                <m:Label text="Var 1" />
+                <m:Label text="Var 1" class="customLabelFontSize"/>
                 <template>
-                    <m:Label text="{OOBFixModel>Var1}" />
+                    <m:Label text="{OOBFixModel>Var1}" class="customLabelFontSize"/>
                 </template>
             </Column>
             <Column width="5rem">
-                <m:Label text="Var 2" />
+                <m:Label text="Var 2" class="customLabelFontSize"/>
                 <template>
-                    <m:Label text="{OOBFixModel>Var2}" />
+                    <m:Label text="{OOBFixModel>Var2}" class="customLabelFontSize"/>
                 </template>
             </Column>
             <!-- <Column
@@ -40,11 +41,13 @@
                 <m:Label
                     text="Message"
                     width="15rem"
+                    class="customLabelFontSize"
                 />
                 <template>
                     <m:Input
                         value="{OOBFixModel>Message}"
                         editable="false"
+                        class="customInputFontSize"
                     />
                 </template>
             </Column>

@@ -1,1 +1,192 @@
 /* Enter your custom styles here */
+/* .mySmallFilterBar .sapMLabel,
+.mySmallFilterBar .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+/* .mySmallFilterBar .sapUiAFBItemsContainer {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+
+.customSearchFontSize .sapMSFI {
+    font-size: 11px !important;
+} */
+
+/* Optional: Adjust the search icon size to match */
+/* .customSearchFontSize .sapMSFBy {
+    font-size: 11px !important;
+}
+
+.myCustomSmallTable .sapUiTableTd .sapMText {
+    font-size: 11px !important;
+}
+
+.customDateFontSize .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+
+/* Optional: Shrink the calendar icon to match the text scale */
+/* .customDateFontSize .sapMInputBaseIcon {
+    font-size: 11px !important;
+    line-height: 11px !important; 
+} */
+
+/* Target the label elements inside the column header row */
+/* .customSmartTableFontSize .sapMListTblHeaderCell .sapMLabel {
+    font-size: 12px !important; 
+    font-weight: bold !important;  
+} */
+/* Decreases text inside cells, labels, and column headers */
+/* .customSmartTableFontSize .sapMListTblCell,
+.customSmartTableFontSize .sapMText,
+.customSmartTableFontSize .sapMLabel {
+    font-size: 11px !important;
+} */
+
+/* Optional: Decreases row header text size */
+/* .customSmartTableFontSize .sapMListTblHeaderCell .sapMLabel {
+    font-size: 11px !important;
+} */
+
+/* Target Column Headers */
+/* .myCustomSmallTable .sapUiTableColHdr .sapUiTableColCell > .sapMText,
+.myCustomSmallTable .sapUiTableColHdr .sapUiTableColCell > .sapMLabel {
+    font-size: 11px !important; 
+} */
+
+/* Target Row Cells (Data) */
+/* .myCustomSmallTable .sapUiTableTd .sapMListTblCell,
+.myCustomSmallTable .sapUiTableTd .sapMText,
+.myCustomSmallTable .sapUiTableTd .sapMLabel,
+.myCustomSmallTable .sapUiTableTd .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+/* Target and scale down the checkbox block inside the row selection column */
+/* .myCustomSmallTable .sapMListTblSelCol .sapMCbBg {
+    transform: scale(0.6) !important;
+    transform-origin: center center;
+} */
+
+/* Optional: Scale down the "Select All" checkbox in the header row */
+/* .myCustomSmallTable th.sapMListTblHeaderSelCol .sapMCbBg {
+    transform: scale(0.6) !important;
+    transform-origin: center center;
+}
+.myCustomSmallTable .sapMListTblCell {
+    padding-top: 4px !important;    /* Default is usually 8px or 12px */
+    padding-bottom: 4px !important;
+} */
+
+/* 3. Ensure the selection checkbox column aligns with the new row height */
+/* .myCustomSmallTable .sapMListTblSelCol {
+    height: auto !important;
+}
+
+.customButtonFontSize .sapMBtnContent {
+    font-size: 11px !important;
+} */
+
+/* Optional: Shrink the icon size to match the text scale */
+/* .customButtonFontSize .sapMBtnIcon {
+    font-size: 11px !important;
+} */
+
+/* .customToolbarTitleSize.sapMTitle {
+    font-size: 11px !important;
+} */
+
+/* .customCheckBoxFontSize .sapMCbLabel {
+    font-size: 11px !important;
+} */
+/* Target the Link component directly */
+/* .customLinkFontSize.sapMLnk {
+    font-size: 11px !important;
+} */
+/* Target the Label component directly */
+/* .customLabelFontSize.sapMLabel {
+    font-size: 11px !important;
+} */
+/* Target the Text component directly */
+/* .customTextFontSize.sapMText {
+    font-size: 11px !important;
+} */
+/* Target the inner text displayed inside the Select box */
+/* .customSelectFontSize .sapMSltLabel {
+    font-size: 11px !important;
+} */
+
+/* Optional: Shrink the arrow icon to match the text scale */
+/* .customSelectFontSize .sapMSltArrow {
+    font-size: 11px !important;
+} */
+/* Target the text typed, displayed, or placeholder text inside the input */
+/* .customInputFontSize .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+
+/* 1. Target form field labels */
+/* .customFormFontSize .sapMLabel {
+    font-size: 11px !important;
+} */
+
+/* 2. Target standard text blocks */
+/* .customFormFontSize .sapMText {
+    font-size: 11px !important;
+} */
+
+/* 3. Target input fields, drop-downs, and datepickers */
+/* .customFormFontSize .sapMInputBaseInner,
+.customFormFontSize .sapMSltLabel {
+    font-size: 11px !important;
+} */
+
+/* 4. Target form section headers (core:Title) */
+/* .customFormFontSize .sapMFormTitle {
+    font-size: 11px !important;
+} */
+
+/* 1. Target the Panel header text */
+/* .customPanelFontSize .sapMPanelHdr {
+    font-size: 11px !important; 
+} */
+
+/* 2. Target standard text components inside the panel content */
+/* .customPanelFontSize .sapMPanelContent .sapMText {
+    font-size: 11px !important;
+} */
+
+/* 3. Target labels inside the panel content */
+/* .customPanelFontSize .sapMPanelContent .sapMLabel {
+    font-size: 11px !important;
+} */
+/* Target the editable text inside the TextArea wrapper */
+/* .customTextAreaFontSize .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+
+/* 1. Target Title text */
+/* .customToolbarFontSize .sapMTitle {
+    font-size: 11px !important;
+} */
+
+/* 2. Target Button text and icons */
+/* .customToolbarFontSize .sapMBtnContent,
+.customToolbarFontSize .sapMBtnIcon {
+    font-size: 11px !important;
+} */
+
+/* 3. Target Input fields or Search fields */
+/* .customToolbarFontSize .sapMInputBaseInner {
+    font-size: 11px !important;
+} */
+
+/* 4. Target standard Labels or generic Text blocks */
+/* .customToolbarFontSize .sapMLabel,
+.customToolbarFontSize .sapMText {
+    font-size: 11px !important;
+} */
+
+
+
+

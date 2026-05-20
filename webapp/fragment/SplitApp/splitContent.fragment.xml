@@ -1,0 +1,224 @@
+<core:FragmentDefinition
+    displayBlock="true"
+    xmlns:l="sap.ui.layout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    height="100%"
+>
+	<l:Splitter height="600px" orientation="Vertical">
+			<!-- <l:Splitter>
+				<l:layoutData>
+					<l:SplitterLayoutData size="180px" resizable="true"/>
+				</l:layoutData>
+				<l:contentAreas>
+					<core:Fragment
+                                    fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionItem"
+                                    type="XML"
+                                />
+
+				</l:contentAreas>
+			</l:Splitter> -->
+            <l:Splitter>
+				<l:layoutData>
+					<l:SplitterLayoutData size="30px" resizable="true"/>
+				</l:layoutData>
+				<l:contentAreas>
+					<Toolbar>
+                <Label
+                    text="{OOBFixModel>/oView/ContractAccount}"
+                    design="Bold"
+                    class="customLabelFontSize"
+                />
+                <Label
+                    text="{OOBFixModel>/oView/InvoiceNumber}"
+                    design="Bold"
+                    class="customLabelFontSize"
+                />
+                <Label id="idSelInvoiceTotal"
+                    text="{OOBFixModel>/oView/InvoiceTotal}"
+                    design="Bold"
+                    class="customLabelFontSize"
+                />
+                <Label id="idSelInvoiceTotalCalc"
+                    text="{OOBFixModel>/oView/InvoiceTotalCalc}"
+                    design="Bold"
+                    class="customLabelFontSize"
+                />
+                <CheckBox
+                    text="Suppress Mail"
+                    selected="{OOBFixModel>/bIsSuppressMail}"
+                    class="customCheckBoxFontSize"
+                />
+            </Toolbar>
+				</l:contentAreas>
+			</l:Splitter>
+			<l:Splitter width="100%">
+				<l:layoutData>
+					<l:SplitterLayoutData size="400px" resizable="true"/>
+				</l:layoutData>
+				<l:contentAreas> 
+					<Panel width="100%"
+                                headerText="Summary Items"
+                                height="100%"
+                            >
+                            <layoutData>
+                <l:SplitterLayoutData size="500px" minSize="150px" resizable="true" />
+            </layoutData>
+                                <headerToolbar>
+                                    <OverflowToolbar>
+                                        <Title text="Summary Items" class="customToolbarTitleSize"/>
+                                        <ToolbarSpacer />
+                                        <Button
+                                            icon="sap-icon://add"
+                                            class="customButtonFontSize"
+                                            type="Accept"
+                                            press="onPressAddSummaryItems"
+                                            enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                                        />
+                                        <Button
+                                            icon="sap-icon://less"
+                                            class="customButtonFontSize"
+                                            type="Negative"
+                                            press="onPressRemoveSummaryItems"
+                                            enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                                        />
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <core:Fragment
+                                    fragmentName="com.sap.lh.mr.zlhoobfix.fragment.summaryItems"
+                                    type="XML"
+                                />
+                            </Panel>
+					<l:Splitter orientation="Vertical" resize="true">
+						<Panel
+                                    headerText="Budget Billing Plan"
+                                    height="100%" class="customPanelFontSize"
+                                >
+                                    <core:Fragment
+                                        fragmentName="com.sap.lh.mr.zlhoobfix.fragment.BudBilling"
+                                        type="XML"
+                                    />
+                                </Panel>
+						<Panel
+                                        headerText="Miscellaneous Charges"
+                                        height="100%"
+                                    >
+                                        <headerToolbar>
+                                            <OverflowToolbar>
+                                                <Title text="Misc. Charges" class="customToolbarTitleSize"/>
+                                                <ToolbarSpacer />
+                                                <Button
+                                                    icon="sap-icon://add"
+                                                    type="Accept"
+                                                    class="customButtonFontSize"
+                                                    press="onPressAddMiscellenous"
+                                                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                                                />
+                                                <Button
+                                                    icon="sap-icon://less"
+                                                    type="Negative"
+                                                    class="customButtonFontSize"
+                                                    press="onPressRemoveMiscellenous"
+                                                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                                                />
+                                            </OverflowToolbar>
+                                        </headerToolbar>
+                                        <core:Fragment
+                                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.MiscellaneousChg"
+                                            type="XML"
+                                        />
+                                    </Panel>
+                                    <Panel
+                                        headerText="Long Text"
+                                        height="100%" class="customPanelFontSize"
+                                    >
+                                        <core:Fragment
+                                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.TextArea"
+                                            type="XML"
+                                        />
+                                    </Panel>
+					</l:Splitter>
+					<!-- <Button width="100%" text="Content 5">
+						<layoutData>
+							<l:SplitterLayoutData size="30%" minSize="200px" />
+						</layoutData>
+					</Button> -->
+				</l:contentAreas>
+			</l:Splitter>
+			<l:Splitter>
+				<l:layoutData>
+					<l:SplitterLayoutData size="200px" resizable="true"/>
+				</l:layoutData>
+				<l:contentAreas>
+					<Panel
+                    width="auto"
+                    class="sapUiResponsiveMargin"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="Messages" class="customToolbarTitleSize"/>
+                            <ToolbarSpacer />
+
+                            <Button
+                                icon="sap-icon://less"
+                                type="Negative"
+                                press="onPressRemoveMessage"
+                                enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <content>
+                        <core:Fragment
+                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.Messages"
+                            type="XML"
+                        />
+                    </content>
+                </Panel>
+					<!-- <Button width="100%" text="Content 7">
+						<layoutData>
+							<l:SplitterLayoutData size="auto" />
+						</layoutData>
+					</Button> -->
+				</l:contentAreas>
+			</l:Splitter>
+            <!-- <l:Splitter>
+				<l:layoutData>
+					<l:SplitterLayoutData size="100px" resizable="true"/>
+				</l:layoutData>
+				<OverflowToolbar>
+                <ToolbarSpacer />
+                <Button
+                    text="Validate"
+                    type="Emphasized"
+                    press="onPressValidate"
+                    icon="sap-icon://validate"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+                <Button
+                    text="Save"
+                    icon="sap-icon://save"
+                    type="Emphasized"
+                    press="onPressSave"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+                <Button
+                    text="Reload"
+                    icon="sap-icon://refresh"
+                    type="Emphasized"
+                    press="onPressRealod"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+                <Button
+                    text="Reverse Validation"
+                    icon="sap-icon://media-reverse"
+                    type="Emphasized"
+                    visible="true"
+                    press="onPressReverseValidate"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+            </OverflowToolbar>
+			</l:Splitter> -->
+		</l:Splitter> 
+
+</core:FragmentDefinition>

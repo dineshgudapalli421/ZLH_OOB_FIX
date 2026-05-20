@@ -127,7 +127,7 @@ sap.ui.define([
                         }
                     }
                 },
-                error: function () {
+                error: function (oError) {
                     var oMessage;
                     if (oError.responseText.startsWith("<")) {
                         var parser = new DOMParser();

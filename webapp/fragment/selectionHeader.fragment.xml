@@ -11,6 +11,7 @@
         search=".onSearch"
         filterChange=".onFilterChange"
         afterVariantLoad=".onAfterVariantLoad"
+        class="mySmallFilterBar"
     >
         <fb:filterGroupItems>
             <fb:FilterGroupItem
@@ -26,6 +27,7 @@
                         placeholder="Batch ID"
                         search="onSubmitBatchId"
                         width="25%"
+                        class="customSearchFontSize"
                     />
                 </fb:control>
             </fb:FilterGroupItem>
@@ -37,7 +39,7 @@
             >
                 <fb:control>
                     <m:DatePicker
-                        id="idDateInput"
+                        id="idDateInput" class="customDateFontSize"
                         value="{path:'SelectionModel>/oInvoiceDate', type: 'sap.ui.model.odata.type.Date'}"
                     />
                 </fb:control>

@@ -5,6 +5,7 @@
     <TextArea
         id="idActionLogLongText"
         value="{OOBFixModel>/sLongText}"
+        class="customTextAreaFontSize"
         growing="true"
         growingMaxLines="7"
         width="100%"

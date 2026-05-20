@@ -22,7 +22,7 @@
         columnsL="2"
         columnsM="2"
         singleContainerFullSize="false"
-        class="sapUiFormM"
+        class="customFormFontSize"
     >
         <f:content>
             <core:Title />

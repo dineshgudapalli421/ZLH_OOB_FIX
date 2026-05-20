@@ -5,8 +5,9 @@
     xmlns:u="sap.ui.unified"
     xmlns:c="sap.ui.core"
     xmlns:m="sap.m"
+    xmlns:l="sap.ui.layout"
     xmlns:f="sap.f">
-    <f:DynamicPage headerExpanded="{/headerExpanded}">
+    <f:DynamicPage headerExpanded="true" showFooter="true" stickyHeader="true">
         <f:header>
             <f:DynamicPageHeader>
                 <f:content>
@@ -14,27 +15,61 @@
                         fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionHeader"
                         type="XML"
                     />
+                    <c:Fragment
+                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionItem"
+                            type="XML"
+                        /> 
+                    <c:Fragment
+                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.SplitApp.splitContent"
+                            type="XML"
+                        />  
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
         <f:content>
-            <c:Fragment
-                fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionItem"
-                type="XML"
-            />
-        </f:content>
-        <!-- <f:footer>
-            <OverflowToolbar>
-                <ToolbarSpacer />
-                <Button
-                    type="Accept"
-                    text="Accept"
+            <!-- <c:Fragment
+                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.selectionItem"
+                            type="XML"
+                        />                        -->
+                        <!-- <c:Fragment
+                            fragmentName="com.sap.lh.mr.zlhoobfix.fragment.SplitApp.splitContent"
+                            type="XML"
+                        />                 -->
+        </f:content>    
+         <f:footer>
+            <m:OverflowToolbar class="customToolbarFontSize">
+                <m:ToolbarSpacer />
+                <m:Button
+                    text="Validate"
+                    type="Emphasized"
+                    press="onPressValidate"
+                    icon="sap-icon://validate"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
                 />
-                <Button
-                    type="Reject"
-                    text="Reject"
+                <m:Button
+                    text="Save"
+                    icon="sap-icon://save"
+                    type="Emphasized"
+                    press="onPressSave"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
                 />
-            </OverflowToolbar>
-        </f:footer> -->
+                <m:Button
+                    text="Reload"
+                    icon="sap-icon://refresh"
+                    type="Emphasized"
+                    press="onPressRealod"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+                <m:Button
+                    text="Reverse Validation"
+                    icon="sap-icon://media-reverse"
+                    type="Emphasized"
+                    visible="true"
+                    press="onPressReverseValidate"
+                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                />
+            </m:OverflowToolbar>            
+        
+        </f:footer>   
     </f:DynamicPage>
 </mvc:View>

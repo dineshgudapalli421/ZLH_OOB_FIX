@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <ViewSettingsDialog confirm="handleFilterDialogConfirm">
+        <filterItems>
+			<ViewSettingsFilterItem
+				text="Status"
+				key="1"
+				multiSelect="false"
+				items="{FieldMonitorModel>/Filterparameters}"
+			>
+				<items>
+					<ViewSettingsItem
+						text="{FieldMonitorModel>Status}"
+						key="{FieldMonitorModel>Status}"
+					/>
+				</items>
+			</ViewSettingsFilterItem>
+            <ViewSettingsFilterItem
+                text="Order Number"
+                key="ORDER_NO"
+                multiSelect="false"
+                items="{FieldMonitorModel>/Filterparameters}"
+            >
+                <items>
+                    <ViewSettingsItem
+                        text="{FieldMonitorModel>ORDER_NO}"
+                        key="{FieldMonitorModel>ORDER_NO}"
+                    />
+                </items>
+            </ViewSettingsFilterItem>
+        </filterItems>
+    </ViewSettingsDialog>
+</core:FragmentDefinition>

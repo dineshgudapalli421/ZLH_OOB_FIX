@@ -20,6 +20,6 @@ builder:
           name: ZLH_OOB_FIX
           description: OOB FIX TOOL
           package: ZFIORI
-          transport: SDVK916356
+          transport: SDVK916969
         exclude:
           - /test/
