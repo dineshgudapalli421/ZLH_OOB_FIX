@@ -40,33 +40,37 @@
             <m:OverflowToolbar class="customToolbarFontSize">
                 <m:ToolbarSpacer />
                 <m:Button
+                    id="idValidate"
                     text="Validate"
                     type="Emphasized"
                     press="onPressValidate"
                     icon="sap-icon://validate"
-                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                    enabled="false"
                 />
                 <m:Button
+                id="idSave"
                     text="Save"
                     icon="sap-icon://save"
                     type="Emphasized"
                     press="onPressSave"
-                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                    enabled="false"
                 />
                 <m:Button
+                    id="idReload"
                     text="Reload"
                     icon="sap-icon://refresh"
                     type="Emphasized"
                     press="onPressRealod"
-                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                    enabled="false"
                 />
                 <m:Button
+                    id="idReverseValidate"
                     text="Reverse Validation"
                     icon="sap-icon://media-reverse"
                     type="Emphasized"
                     visible="true"
                     press="onPressReverseValidate"
-                    enabled="{= ${OOBFixModel>/IsReleased} !== 'true'}"
+                    enabled="false"
                 />
             </m:OverflowToolbar>            
         

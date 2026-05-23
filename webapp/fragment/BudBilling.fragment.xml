@@ -6,9 +6,8 @@
 >
     <f:SimpleForm
         id="SimpleFormChange480_12120Dual"
-        editable="false"
+        editable="true"
         layout="ResponsiveGridLayout"
-        showHeader="false"
         labelSpanXL="4"
         labelSpanL="4"
         labelSpanM="12"
@@ -22,39 +21,72 @@
         columnsL="2"
         columnsM="2"
         singleContainerFullSize="false"
-        class="customFormFontSize"
+        class="sapUiNoMarginTop"
     >
         <f:content>
-            <core:Title />
-            <Label text="BBP Amount" />
-            <Input
-                value="{path:'OOBFixModel>/BBPPlan/BbpAmount',formatter:'.formatter.Currency'}"
-                change="onChangePropPricesBBPAmnt"
-                textAlign="End"
-                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
-            />
-            <Label text="BB To Date" />
-            <Input
-                value="{path:'OOBFixModel>/BBPPlan/BbToDate', type: 'sap.ui.model.odata.type.Date'}"
-                change="onChangePropPricesBBTODate"
-                textAlign="End"
-                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
-            />
-            <core:Title />
-            <Label text="Actual Cost to Date" />
-            <Input
-                value="{path:'OOBFixModel>/BBPPlan/ActualCostDt', type: 'sap.ui.model.odata.type.Date'}"
-                change="onChangePropPricesActCostDt"
-                textAlign="End"
-                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
-            />
-            <Label text="Unbilled Budget Balance" />
-            <Input
-                value="{path:'OOBFixModel>/BBPPlan/UnbilBudgetBal', formatter:'.formatter.Currency'}"
-                change="onChangePropPricesBugBal"
-                textAlign="End"
-                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
-            />
+           
+            <VBox >
+                <HBox >
+                    <VBox >
+                        <HBox >
+                            <Label text="BBP Amount" class="condensedLabel"/>
+                        </HBox>
+                        <HBox>
+                            <Input
+                                value="{path:'OOBFixModel>/BBPPlan/BbpAmount',formatter:'.formatter.Currency'}"
+                                change="onChangePropPricesBBPAmnt"
+                                textAlign="End"
+                                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                            />
+                        </HBox>
+                    </VBox>
+                    <VBox >
+                        <HBox >
+                            <Label text="BB To Date" class="condensedLabel"/>
+                        </HBox>
+                        <HBox>
+                            <Input
+                                value="{path:'OOBFixModel>/BBPPlan/BbToDate', type: 'sap.ui.model.odata.type.Date'}"
+                                change="onChangePropPricesBBTODate"
+                                textAlign="End"
+                                editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                            />
+                        </HBox>
+                    </VBox>
+                </HBox>
+                <HBox >
+                    <VBox ></VBox>
+                    <VBox ></VBox>
+                </HBox>
+                <HBox >
+                    <VBox >
+                        <HBox >
+                            <Label text="Actual Cost to Date" class="condensedLabel"/>
+                        </HBox>
+                        <HBox>
+                            <Input
+                        value="{path:'OOBFixModel>/BBPPlan/ActualCostDt', type: 'sap.ui.model.odata.type.Date'}"
+                        change="onChangePropPricesActCostDt"
+                        textAlign="End"
+                        editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                    />
+                        </HBox>
+                    </VBox>
+                    <VBox >
+                        <HBox >
+                            <Label text="Unbilled Budget Balance" class="condensedLabel"/>
+                        </HBox>
+                        <HBox>
+                            <Input
+                        value="{path:'OOBFixModel>/BBPPlan/UnbilBudgetBal', formatter:'.formatter.Currency'}"
+                        change="onChangePropPricesBugBal"
+                        textAlign="End"
+                        editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                    />
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </VBox>
         </f:content>
     </f:SimpleForm>
 </core:FragmentDefinition>

@@ -5,6 +5,7 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
     height="100%"
+    xmlns:f="sap.ui.layout.form"
 >
 	<l:Splitter height="600px" orientation="Vertical">
 			<!-- <l:Splitter>
@@ -93,12 +94,75 @@
 					<l:Splitter orientation="Vertical" resize="true">
 						<Panel
                                     headerText="Budget Billing Plan"
-                                    height="100%" class="customPanelFontSize"
-                                >
-                                    <core:Fragment
+                                    class="sapUiNoContentPadding" height="auto"
+                                >                                
+                                    <!-- <core:Fragment
                                         fragmentName="com.sap.lh.mr.zlhoobfix.fragment.BudBilling"
                                         type="XML"
-                                    />
+                                    />                                     -->
+                                    <VBox class="sapUiSizeCompact sapUiSmallMargin" width="100%">
+        <items>
+            
+            <!-- ROW 1 -->
+            <HBox width="100%" class="sapUiTinyMarginBottom">
+                <items>
+                    <!-- Column 1 -->
+                    <VBox width="45%" class="sapUiSmallMarginEnd">
+                        <Label text="BBP Amount" />
+                                                <Input
+                                                    value="{path:'OOBFixModel>/BBPPlan/BbpAmount',formatter:'.formatter.Currency'}"
+                                                    change="onChangePropPricesBBPAmnt"
+                                                    textAlign="End"
+                                                    editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                                                />
+
+                    </VBox>
+                    
+                    <!-- Column 2 -->
+                    <VBox width="45%">
+                        <Label text="BB To Date" />
+                                                <Input
+                                                    value="{path:'OOBFixModel>/BBPPlan/BbToDate', type: 'sap.ui.model.odata.type.Date'}"
+                                                    change="onChangePropPricesBBTODate"
+                                                    textAlign="End"
+                                                    editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                                                />
+
+                    </VBox>
+                </items>
+            </HBox>
+            
+            <!-- ROW 2 -->
+            <HBox width="100%">
+                <items>
+                    <!-- Column 1 -->
+                    <VBox width="45%" class="sapUiSmallMarginEnd">
+                        <Label text="Actual Cost to Date" />
+                                                <Input
+                                                    value="{path:'OOBFixModel>/BBPPlan/ActualCostDt', type: 'sap.ui.model.odata.type.Date'}"
+                                                    change="onChangePropPricesActCostDt"
+                                                    textAlign="End"
+                                                    editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                                                />
+
+                    </VBox>
+                    
+                    <!-- Column 2 -->
+                    <VBox width="45%">
+                        <Label text="Unbilled Budget Balance" />
+                                                <Input
+                                                    value="{path:'OOBFixModel>/BBPPlan/UnbilBudgetBal', formatter:'.formatter.Currency'}"
+                                                    change="onChangePropPricesBugBal"
+                                                    textAlign="End"
+                                                    editable="{= ${OOBFixModel>/IsValidated} !== 'true'}"
+                                                />
+
+                    </VBox>
+                </items>
+            </HBox>
+            
+        </items>
+    </VBox>
                                 </Panel>
 						<Panel
                                         headerText="Miscellaneous Charges"

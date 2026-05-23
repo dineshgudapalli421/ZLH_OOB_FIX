@@ -1,4 +1,8 @@
 /* Enter your custom styles here */
+.condensedLabel.sapMLtbl {
+    height: 1.0rem !important;
+    line-height: 1.0rem !important;
+}
 /* .mySmallFilterBar .sapMLabel,
 .mySmallFilterBar .sapMInputBaseInner {
     font-size: 11px !important;
@@ -74,7 +78,7 @@
     transform-origin: center center;
 }
 .myCustomSmallTable .sapMListTblCell {
-    padding-top: 4px !important;    /* Default is usually 8px or 12px */
+    padding-top: 4px !important;   
     padding-bottom: 4px !important;
 } */
 

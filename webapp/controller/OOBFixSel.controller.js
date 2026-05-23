@@ -11,7 +11,7 @@ sap.ui.define([
     "sap/ui/core/library"
 ], (Controller, Filter, FilterOperator, formatter, MessageBox, MessageToast, Spreadsheet, Sorter, Fragment, CoreLibrary) => {
     "use strict";
-    var oController, oRouter, oDataModel, oBatchId = '';
+    var oController, oRouter, oDataModel, oBatchId = '', bAllReleased;
     const SortOrder = CoreLibrary.SortOrder;
     return Controller.extend("com.sap.lh.mr.zlhoobfix.controller.OOBFixSel", {
         formatter: formatter,
@@ -22,6 +22,7 @@ sap.ui.define([
 
             oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
+                debugger;
                 var oTable = oController.getView().byId("idTableInvoices");
                 var oModel = oController.getView().getModel("SelectionModel");
                 var oBinding = oTable.getBinding("rows");
@@ -31,6 +32,7 @@ sap.ui.define([
                     oModel.setProperty("/bPullListBtn", false);
                 }
                 else if (aItems.length > 0) {
+                    bAllReleased = aItems.every(item => item.Released);
                     var Count = 0, pulllistCount = 0;
                     for (var i = 0; i < aItems.length; i++) {
                         if ((aItems[i].Updated === true && aItems[i].Validated === true) || aItems[i].Reversed === true) {
@@ -58,14 +60,17 @@ sap.ui.define([
                         //****************************************** */
                     }
                     if (oPullList) {
+                        oController.PulllistCount = pulllistCount;
                         if (pulllistCount === 0) {
                             oModel.setProperty("/bPullListBtn", true);
                         }
                         else {
                             oModel.setProperty("/bPullListBtn", false);
                         }
+                        oController._refreshFooter(pulllistCount);
                         //oModel.setProperty("/bPullListBtn", bAllReleased);
                     }
+
                 }
             });
             oDataModel.attachBatchRequestFailed(function (oError) {
@@ -196,7 +201,7 @@ sap.ui.define([
                 MISC: [],
                 SummCharges: [],
                 sLongText: '',
-                IsReleased: oController.Released,
+                IsReleased: !bAllReleased,//oController.Released,
                 bIsSuppressMail: false,
                 aSummaryItemsList: []
             })
@@ -479,19 +484,37 @@ sap.ui.define([
                 oModel.setProperty("/Message", aMessages);
             }
         },
+        _fngetIsReleased: function () {
+            var oTable = this.getView().byId("idTableInvoices");
+            var sSelectedIndex = oTable.getSelectedIndex();
+            if (sSelectedIndex !== -1) {
+                var oContexts = oTable.getBinding('rows').getContexts();
+                var sPath = oContexts[sSelectedIndex].getPath();
+                var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
+                debugger;
+                if (oData.Reversed || oData.Released) {
+                    MessageToast.show("Invoice is already Reversed or Released");
+                    return;
+                }
+            }
+        },
         onPressValidate: function () {
+            oController._fngetIsReleased();
             oController._fnCreateCall("V");
             oController._refreshList();
         },
         onPressSave: function () {
+            oController._fngetIsReleased();
             oController._fnCreateCall("S");
             oController._refreshList();
         },
         onPressReverseValidate: function () {
+            oController._fngetIsReleased();
             oController._fnCreateCall("U");
             oController._refreshList();
         },
         onPressRealod: function () {
+            oController._fngetIsReleased();
             oController._getServices(oController._oInvoiceNumber, oController._oAccountNumber, true);
         },
         _fnCreateCall: function (sUserAction) {
@@ -692,6 +715,7 @@ sap.ui.define([
 
         },
         onReleaseBatch: function (sInvNumber, sAccNumber) {
+            var oModel = oController.getView().getModel("OOBFixModel");
             var oTable = this.getView().byId("idTableInvoices");
             var oContexts = oTable.getBinding('rows').getContexts();
             if (oContexts.length > 0) {
@@ -710,6 +734,7 @@ sap.ui.define([
                                     urlParameters: { "BatchId": sBatchId },
                                     success: function (oData, response) {
                                         MessageToast.show("Batch released successfully");
+                                        oModel.setProperty("/IsReleased", false);
                                         oController._refreshList();
                                     },
                                     error: function (oError) {
@@ -741,6 +766,7 @@ sap.ui.define([
                 oDataModel.read("/Pull_listSet", {
                     filters: [new Filter("BatchId", FilterOperator.EQ, sBatchID)],
                     success: function (oData) {
+                        oController.getView().getModel("SelectionModel").setProperty("/oBatchId", sBatchID);
                         oController.getView().getModel("SelectionModel").setProperty("/aPullList", oData.results);
                         oController._fnOpenPullList();
                     },
@@ -806,37 +832,37 @@ sap.ui.define([
             var aPullList = oModel.getProperty("/aPullList");
             var sBatchId = oModel.getProperty("/sBatchId");
             // var myArray = [/* your array containing pull_listSet objects */];
-            //var oPayload = {};
-            var oPayload = {
-                "BatchId": sBatchId,//"42_UR",
-                "Pull_listSet": aPullList.map(item => ({
-                    "BatchId": sBatchId,//item.BatchId,
-                    "InputCheck": item.InputCheck,
-                    "InvoiceNo": item.InvoiceNo,
-                    "ContractAcc": item.ContractAcc
-                }))
-            };
-            // if (aPullList.length > 0) {
-            //     oPayload = {
-            //         "BatchId": sBatchId,
-            //         "Pull_listSet": aPullList.map(item => ({
-            //             "BatchId": sBatchId,//item.BatchId,
-            //             "InputCheck": item.InputCheck,
-            //             "InvoiceNo": item.InvoiceNo,
-            //             "ContractAcc": item.ContractAcc
-            //         }))
-            //     };
-            // } else {
-            //     oPayload = {
-            //         "BatchId": sBatchId,
-            //         "Pull_listSet": ({
-            //             "BatchId": sBatchId,//item.BatchId,
-            //             "InputCheck": '',
-            //             "InvoiceNo": '',
-            //             "ContractAcc": ''
-            //         })
-            //     };
-            // }
+            var oPayload = {};
+            // var oPayload = {
+            //     "BatchId": sBatchId,//"42_UR",
+            //     "Pull_listSet": aPullList.map(item => ({
+            //         "BatchId": sBatchId,//item.BatchId,
+            //         "InputCheck": item.InputCheck,
+            //         "InvoiceNo": item.InvoiceNo,
+            //         "ContractAcc": item.ContractAcc
+            //     }))
+            // };
+            if (aPullList.length > 0) {
+                oPayload = {
+                    "BatchId": sBatchId,
+                    "Pull_listSet": aPullList.map(item => ({
+                        "BatchId": sBatchId,//item.BatchId,
+                        "InputCheck": item.InputCheck,
+                        "InvoiceNo": item.InvoiceNo,
+                        "ContractAcc": item.ContractAcc
+                    }))
+                };
+            } else {
+                oPayload = {
+                    "BatchId": sBatchId,
+                    "Pull_listSet": [{
+                        "BatchId": sBatchId,//item.BatchId,
+                        "InputCheck": false,
+                        "InvoiceNo": '',
+                        "ContractAcc": ''
+                    }]
+                };
+            }
             oDataModel.create("/Dummy_pull_list_mailSet", oPayload, {
                 success: function (oData) {
                     // Handle success response
@@ -868,6 +894,25 @@ sap.ui.define([
             oBatchId = oBatchIdInput.getValue();
             oController._refreshList();
             oController._modelInit();
+            //oController._refreshFooter();           
+        },
+        _refreshFooter: function (Count) {
+            //var oReleased = oController._fngetIsReleased();
+            var oIdValidate = oController.getView().byId("idValidate");
+            var oIdSave = oController.getView().byId("idSave");
+            var oIdReload = oController.getView().byId("idReload");
+            var oIdRevrseValidate = oController.getView().byId("idReverseValidate");
+            if (Count === 0) {
+                oIdValidate.setEnabled(false);
+                oIdSave.setEnabled(false);
+                oIdReload.setEnabled(false);
+                oIdRevrseValidate.setEnabled(false);
+            } else if (Count > 0) {
+                oIdValidate.setEnabled(true);
+                oIdSave.setEnabled(true);
+                oIdReload.setEnabled(true);
+                oIdRevrseValidate.setEnabled(true);
+            }
         },
         _refreshList: function () {
             var oSelectionModel = oController.getView().getModel("SelectionModel");
@@ -896,11 +941,6 @@ sap.ui.define([
             }
             oBinding.filter(oFilter);
             oBinding.refresh(true);
-            // var aColumns = oTable.getColumns();
-
-            // aColumns.forEach(function (oColumn, iIndex) {
-            //     oTable.autoResizeColumn(iIndex);
-            // });
         },
         oInvoiceLinkPress: function (oEvent) {
             var oSource = oEvent.getSource();
