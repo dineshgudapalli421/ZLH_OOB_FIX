@@ -721,7 +721,10 @@ sap.ui.define([
             if (oContexts.length > 0) {
                 var sPath = oContexts[0].getPath();
                 var oData = oContexts[0].getModel().getProperty(sPath);
-
+                if (oData.Released) {
+                    MessageToast.show("Batch is already Released");
+                    return;
+                }
                 // Display BatchId information before proceeding
                 var sBatchId = oBatchId;// oData.BatchId;
                 MessageBox.confirm("Batch ID: " + sBatchId + "\nDo you want to proceed with the release?", {
@@ -867,6 +870,7 @@ sap.ui.define([
                 success: function (oData) {
                     // Handle success response
                     MessageBox.success(oData.MSG_TXT);
+                    oController.oPullListDialog.close();
                 },
                 error: function (oError) {
                     var oMessage;
