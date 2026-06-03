@@ -12,6 +12,7 @@ sap.ui.define([
 ], (Controller, Filter, FilterOperator, formatter, MessageBox, MessageToast, Spreadsheet, Sorter, Fragment, CoreLibrary) => {
     "use strict";
     var oController, oRouter, oDataModel, oBatchId = '', bAllReleased;
+    var objSelectedIndex;
     const SortOrder = CoreLibrary.SortOrder;
     return Controller.extend("com.sap.lh.mr.zlhoobfix.controller.OOBFixSel", {
         formatter: formatter,
@@ -113,7 +114,10 @@ sap.ui.define([
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
-                var oContexts = oTable.getBinding('rows').getContexts();
+                var oBinding = oTable.getBinding("rows");
+                var iLength = oBinding.getLength(); 
+                var oContexts = oBinding.getContexts(0, iLength);
+                //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
                 debugger;
@@ -138,7 +142,10 @@ sap.ui.define([
             var oTable = this.getView().byId("idTableInvoices");
             var oSelectedIndex = oEvent.getParameter("rowIndex");
             if (oSelectedIndex !== -1) {
-                var oContexts = oTable.getBinding('rows').getContexts();
+                var oBinding = oTable.getBinding("rows");
+                var iLength = oBinding.getLength(); 
+                var oContexts = oBinding.getContexts(0, iLength);
+                //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
                 debugger;
@@ -164,7 +171,10 @@ sap.ui.define([
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
-                var oContexts = oTable.getBinding('rows').getContexts();
+                var oBinding = oTable.getBinding("rows");
+                var iLength = oBinding.getLength();
+                var oContexts = oBinding.getContexts(0, iLength);
+                //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
                 debugger;
@@ -488,7 +498,11 @@ sap.ui.define([
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
-                var oContexts = oTable.getBinding('rows').getContexts();
+                objSelectedIndex = sSelectedIndex;
+                var oBinding = oTable.getBinding("rows");
+                var iLength = oBinding.getLength();
+                var oContexts = oBinding.getContexts(0, iLength);
+                //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
                 debugger;
@@ -502,16 +516,22 @@ sap.ui.define([
             oController._fngetIsReleased();
             oController._fnCreateCall("V");
             oController._refreshList();
+            var oTable = this.getView().byId("idTableInvoices");
+            oTable.setSelectedIndex(objSelectedIndex);
         },
         onPressSave: function () {
             oController._fngetIsReleased();
             oController._fnCreateCall("S");
             oController._refreshList();
+            var oTable = this.getView().byId("idTableInvoices");
+            oTable.setSelectedIndex(objSelectedIndex);
         },
         onPressReverseValidate: function () {
             oController._fngetIsReleased();
             oController._fnCreateCall("U");
             oController._refreshList();
+            var oTable = this.getView().byId("idTableInvoices");
+            oTable.setSelectedIndex(objSelectedIndex);
         },
         onPressRealod: function () {
             oController._fngetIsReleased();
@@ -717,7 +737,10 @@ sap.ui.define([
         onReleaseBatch: function (sInvNumber, sAccNumber) {
             var oModel = oController.getView().getModel("OOBFixModel");
             var oTable = this.getView().byId("idTableInvoices");
-            var oContexts = oTable.getBinding('rows').getContexts();
+            var oBinding = oTable.getBinding("rows");
+            var iLength = oBinding.getLength();
+            var oContexts = oBinding.getContexts(0, iLength);
+            //var oContexts = oTable.getBinding('rows').getContexts();
             if (oContexts.length > 0) {
                 var sPath = oContexts[0].getPath();
                 var oData = oContexts[0].getModel().getProperty(sPath);

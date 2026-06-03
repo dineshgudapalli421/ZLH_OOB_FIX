@@ -102,9 +102,9 @@
             <Column
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Validate"
+                sortProperty="Validated"
             >
-                <m:Label text="Validate" />
+                <m:Label text="Validated" />
                 <template>
                     <m:CheckBox
                         selected="{= ${Validated}}"
@@ -130,9 +130,9 @@
             <Column
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Release Batch"
+                sortProperty="Released"
             >
-                <m:Label text="Release Batch" />
+                <m:Label text="Released" />
                 <template>
                     <m:CheckBox
                         selected="{= ${Released}}"
