@@ -34,6 +34,7 @@
         selectionMode="Single"
         fixedColumnCount="4" 
         class="myCustomSmallTable"
+        rowSelectionChange=".onRowSelect"
         rowHeight="20"
     >
     <rowMode>

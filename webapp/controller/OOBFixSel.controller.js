@@ -12,7 +12,7 @@ sap.ui.define([
 ], (Controller, Filter, FilterOperator, formatter, MessageBox, MessageToast, Spreadsheet, Sorter, Fragment, CoreLibrary) => {
     "use strict";
     var oController, oRouter, oDataModel, oBatchId = '', bAllReleased;
-    var objSelectedIndex;
+    var objSelectedIndex, oSelectedInvoice;
     const SortOrder = CoreLibrary.SortOrder;
     return Controller.extend("com.sap.lh.mr.zlhoobfix.controller.OOBFixSel", {
         formatter: formatter,
@@ -23,11 +23,13 @@ sap.ui.define([
 
             oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
-                debugger;
+                //debugger;
                 var oTable = oController.getView().byId("idTableInvoices");
                 var oModel = oController.getView().getModel("SelectionModel");
                 var oBinding = oTable.getBinding("rows");
-                var aItems = oBinding.getContexts().map(context => context.getObject());
+                var iLength = oBinding.getLength();
+                //var oContexts = oBinding.getContexts(0, iLength);
+                var aItems = oBinding.getContexts(0, iLength).map(context => context.getObject());
                 if (aItems.length === 0) {
                     oModel.setProperty("/bReleaseBatchBtn", false);
                     oModel.setProperty("/bPullListBtn", false);
@@ -71,7 +73,19 @@ sap.ui.define([
                         oController._refreshFooter(pulllistCount);
                         //oModel.setProperty("/bPullListBtn", bAllReleased);
                     }
+                    if (oSelectedInvoice !== '') {
+                        for (var j = 0; j < aItems.length; j++) {
+                            var aSelectedInvoice = aItems[j].PRINTDOC;
 
+                            // Change "ColumnPropertyName" to your actual OData/JSON property name
+                            if (aSelectedInvoice === oSelectedInvoice) {
+                                oTable.setSelectedIndex(j);
+                                oTable.setFirstVisibleRow(j);
+                            }
+                        }
+                    }else if (oSelectedInvoice === ''){
+                        oTable.clearSelection();
+                    }
                 }
             });
             oDataModel.attachBatchRequestFailed(function (oError) {
@@ -89,8 +103,33 @@ sap.ui.define([
             oController._mViewSettingsDialogs = {};
             oController._fndefaultBatch();
         },
+
+        _restoreSelection: function (oEvent) {
+            if (!this._sSelectedKey) {
+                return; // Nothing was selected previously
+            }
+
+            var oTable = this.getView().byId("idTableInvoices");
+            var oBinding = oTable.getBinding("rows");
+            var aContexts = oBinding.getContexts(0, oBinding.getLength()); // Get all current contexts
+
+            // Find the new index matching your saved unique key
+            var iNewIndex = aContexts.findIndex(function (oContext) {
+                return oContext && oContext.getProperty("PRINTDOC") === this._sSelectedKey;
+            }.bind(this));
+
+            if (iNewIndex !== -1) {
+                // Apply selection to the new correct index position
+                oTable.setSelectedIndex(iNewIndex);
+            } else {
+                oTable.clearSelection(); // Clear if old item no longer exists post-refresh
+            }
+
+            // Clear the stored token so it doesn't fire on unexpected data changes
+            this._sSelectedKey = null;
+        },
         _fndefaultBatch: function () {
-            debugger;
+            //debugger;
             var oModel = oController.getView().getModel("SelectionModel");
             oDataModel.read("/Default_BatchId", {
                 success: function (oData) {
@@ -107,6 +146,7 @@ sap.ui.define([
             oController._refreshList();
         },
         onSubmitBatchId: function (oEvent) {
+            oSelectedInvoice = '';
             oController._refreshList();
             oController._modelInit();
         },
@@ -115,12 +155,12 @@ sap.ui.define([
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
                 var oBinding = oTable.getBinding("rows");
-                var iLength = oBinding.getLength(); 
+                var iLength = oBinding.getLength();
                 var oContexts = oBinding.getContexts(0, iLength);
                 //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
-                debugger;
+                //debugger;
                 if (oData.Reversed) {
                     MessageToast.show("Inoivce is already Reversed");
                     return;
@@ -143,31 +183,30 @@ sap.ui.define([
             var oSelectedIndex = oEvent.getParameter("rowIndex");
             if (oSelectedIndex !== -1) {
                 var oBinding = oTable.getBinding("rows");
-                var iLength = oBinding.getLength(); 
+                var iLength = oBinding.getLength();
                 var oContexts = oBinding.getContexts(0, iLength);
-                //var oContexts = oTable.getBinding('rows').getContexts();
-                var sPath = oContexts[sSelectedIndex].getPath();
-                var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
-                debugger;
+                var sPath = oContexts[oSelectedIndex].getPath();
+                var oData = oContexts[oSelectedIndex].getModel().getProperty(sPath);
+
                 if (oData.Reversed) {
                     MessageToast.show("Invoice is already Reversed");
                     return;
                 }
                 if (oData) {
-                    debugger;
-                    oController._oInvoiceNumber = oData.PRINTDOC;
-                    oController._oAccountNumber = oData.VKONTO;
-                    oController._modelInit();
-                    oController._getSummaryItems().then(() => {
-                        return oController._getServices(oData.PRINTDOC, oData.VKONTO);
-                    }).catch((error) => {
-                        MessageBox.error("Error occurred: " + error.message);
-                    });
+                    oSelectedInvoice = oData.PRINTDOC;
+                    // oController._oInvoiceNumber = oData.PRINTDOC;
+                    // oController._oAccountNumber = oData.VKONTO;
+                    // oController._modelInit();
+                    // oController._getSummaryItems().then(() => {
+                    //     return oController._getServices(oData.PRINTDOC, oData.VKONTO);
+                    // }).catch((error) => {
+                    //     MessageBox.error("Error occurred: " + error.message);
+                    // });
                 }
             }
         },
         onPressNavigate1: function () {
-            debugger;
+            //debugger;
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
@@ -177,13 +216,13 @@ sap.ui.define([
                 //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
-                debugger;
+                //debugger;
                 if (oData.Reversed) {
                     MessageToast.show("Invoice is already Reversed");
                     return;
                 }
                 if (oData) {
-                    debugger;
+                    //debugger;
                     oController._oInvoiceNumber = oData.PRINTDOC;
                     oController._oAccountNumber = oData.VKONTO;
                     oController._modelInit();
@@ -219,7 +258,7 @@ sap.ui.define([
         },
         _getSummaryItems: function () {
             return new Promise((resolve, reject) => {
-                debugger;
+                //debugger;
                 var oModel = oController.getView().getModel("OOBFixModel");
                 var sPath = `/SummaryItemDDSet`;
                 oDataModel.read(sPath, {
@@ -240,7 +279,7 @@ sap.ui.define([
             });
         },
         _getServices: function (sInvNumber, sAccNumber, bIsReload, IsReversed) {
-            debugger;
+            //debugger;
             var sInvoiceNumber = sInvNumber;//
             var sAccountNumber = sAccNumber//'5810959'; //sAccNumber;//
             var oModel = oController.getView().getModel("OOBFixModel");
@@ -342,7 +381,7 @@ sap.ui.define([
             var aCurrentItems = oModel.getProperty("/SummCharges");
             var iSelectedIndex = oTable.getSelectedIndex();
             if (iSelectedIndex !== -1) {
-                var SectionName = 'Summary Items';
+                var SectionName = 'Summary Item';
                 if (aCurrentItems[iSelectedIndex].FieldId === 'T6') {
                     MessageBox.confirm("Misc. Charges will be Deleted.Proceed ahead to delete?", {
                         onClose: (oAction) => {
@@ -450,7 +489,7 @@ sap.ui.define([
             var t6Item = aSummCharges.find(item => item.FieldId === 'T6');
             if (sAction === "Add") {
                 if (t6Item) {
-                    debugger;
+                    //debugger;
                     t6Item.Amount = (parseFloat(t6Item.Amount) + parseFloat(sAmount)).toFixed(2);
                     if (parseFloat(t6Item.Amount) < 0) {
                         t6Item.Amount = "0.00"; // Set to zero if the amount goes negative
@@ -495,43 +534,74 @@ sap.ui.define([
             }
         },
         _fngetIsReleased: function () {
+            this._sSelectedKey = null;
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
+                var oContext = oTable.getContextByIndex(sSelectedIndex);
+                if (oContext) {
+                    // Replace 'ID' with your model's actual unique identifier field
+                    this._sSelectedKey = oContext.getProperty("PRINTDOC");
+                }
                 objSelectedIndex = sSelectedIndex;
+                oSelectedInvoice = oTable.getContextByIndex(sSelectedIndex).getProperty("PRINTDOC");
                 var oBinding = oTable.getBinding("rows");
                 var iLength = oBinding.getLength();
                 var oContexts = oBinding.getContexts(0, iLength);
                 //var oContexts = oTable.getBinding('rows').getContexts();
                 var sPath = oContexts[sSelectedIndex].getPath();
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
-                debugger;
+                //debugger;
                 if (oData.Reversed || oData.Released) {
                     MessageToast.show("Invoice is already Reversed or Released");
                     return;
                 }
             }
         },
+        _fngetSelectedInvoice: function () {
+            //debugger;
+            var oTable = this.getView().byId("idTableInvoices");
+            var oBinding = oTable.getBinding("rows").aLastContexts;
+            var iLength = oBinding.length;
+            //var oContexts = oBinding.getContexts(0, iLength);
+            for (var i = 0; i < oBinding.length; i++) {
+                var oRowData = oBinding[i].sPath
+
+                // Change "ColumnPropertyName" to your actual OData/JSON property name
+                if (oRowData.includes(oSelectedInvoice)) {
+                    oTable.setSelectedIndex(i);
+                    oTable.setFirstVisibleRow(i);
+                    //oTable.scrollToIndex(i); // Optional: Scroll to it
+                    break;
+                }
+            }
+        },
         onPressValidate: function () {
             oController._fngetIsReleased();
             oController._fnCreateCall("V");
-            oController._refreshList();
-            var oTable = this.getView().byId("idTableInvoices");
-            oTable.setSelectedIndex(objSelectedIndex);
+            // oController._refreshList();
+            //oController._fngetSelectedInvoice();
+            // var oTable = this.getView().byId("idTableInvoices");
+            // oTable.setSelectedIndex(objSelectedIndex);
+            // oTable.setFirstVisibleRow(objSelectedIndex);
         },
         onPressSave: function () {
             oController._fngetIsReleased();
             oController._fnCreateCall("S");
             oController._refreshList();
-            var oTable = this.getView().byId("idTableInvoices");
-            oTable.setSelectedIndex(objSelectedIndex);
+            //oController._fngetSelectedInvoice();
+            // var oTable = this.getView().byId("idTableInvoices");
+            // oTable.setSelectedIndex(objSelectedIndex);
+            // oTable.setFirstVisibleRow(objSelectedIndex);            
         },
         onPressReverseValidate: function () {
             oController._fngetIsReleased();
             oController._fnCreateCall("U");
             oController._refreshList();
-            var oTable = this.getView().byId("idTableInvoices");
-            oTable.setSelectedIndex(objSelectedIndex);
+            //oController._fngetSelectedInvoice();
+            // var oTable = this.getView().byId("idTableInvoices");
+            // oTable.setSelectedIndex(objSelectedIndex);
+            // oTable.setFirstVisibleRow(objSelectedIndex);
         },
         onPressRealod: function () {
             oController._fngetIsReleased();
@@ -573,6 +643,9 @@ sap.ui.define([
                     oModel.setProperty("/oView/InvoiceNumber", "Invoice# : " + oData.InvoiceNumber);
                     oModel.setProperty("/oView/InvoiceTotal", "Invoice Total(Head) : " + oData.InvoiceTotal);
                     oModel.setProperty("/oView/InvoiceTotalCalc", "Invoice Total(Calc) : " + oData.InvoiceTotalCalc);
+                    oController._refreshList();
+                    oController._fngetSelectedInvoice();
+                    //debugger;
                     MessageBox.success(oData.MsgTxt
                         , {
                             onClose: function () {
@@ -598,7 +671,7 @@ sap.ui.define([
             });
         },
         _getPayload: function (sUserAction) {
-            debugger;
+            //debugger;
             var oModel = oController.getView().getModel("OOBFixModel");
             var invoiceItems = oModel.getProperty("/oView/InvoiceItem");
             var messages = oModel.getProperty("/oView/MESSAGE");
@@ -641,7 +714,7 @@ sap.ui.define([
             var selectedValue = oSelect.getSelectedKey();
             var oModel = oController.getView().getModel("OOBFixModel");
             var aCurrentMiscItems = oModel.getProperty("/MISC");
-            debugger;
+            //debugger;
             var existingItem = aCurrentMiscItems.find(item => item.FieldId === selectedValue && item !== oModel.getProperty(oSelect.getBindingContext("OOBFixModel").getPath()));
             if (existingItem) {
                 MessageBox.error("Selected value is already added to the table. Please select a different value.");
@@ -707,7 +780,7 @@ sap.ui.define([
             var selectedValue = oSelect.getSelectedKey();
             var oModel = oController.getView().getModel("OOBFixModel");
             var aCurrentSummaryItems = oModel.getProperty("/SummCharges");
-            debugger;
+            //debugger;
             var existingItem = aCurrentSummaryItems.find(item => item.FieldId === selectedValue && item !== oModel.getProperty(oSelect.getBindingContext("OOBFixModel").getPath()));
             if (existingItem) {
                 MessageBox.error("Selected value is already added to the table. Please select a different value.");
@@ -853,7 +926,7 @@ sap.ui.define([
             oController.oPullListDialog.close();
         },
         onSubmitPullList: function () {
-            debugger;
+            //debugger;
             var oModel = oController.getView().getModel("SelectionModel")
             var aPullList = oModel.getProperty("/aPullList");
             var sBatchId = oModel.getProperty("/sBatchId");
@@ -912,7 +985,8 @@ sap.ui.define([
             // oController._refreshList();
         },
         onSearch: function () {
-            debugger;
+            //debugger;
+            oSelectedInvoice = '';
             var oBatchIdInput = this.getView().byId("idBatchIdInput");
             var oDateInput = this.getView().byId("idDateInput");
             if (!oBatchIdInput.getValue() && !oDateInput.getValue()) {
@@ -942,11 +1016,12 @@ sap.ui.define([
             }
         },
         _refreshList: function () {
+            //debugger;
             var oSelectionModel = oController.getView().getModel("SelectionModel");
             var sDate = oSelectionModel.getProperty("/oInvoiceDate");
             var sBatchId = oSelectionModel.getProperty("/sBatchId");
             var oTable = this.getView().byId("idTableInvoices");
-            oTable.clearSelection();
+            //oTable.clearSelection();
             var oBinding = oTable.getBinding();
             var oFilter = [];
             var Dateformatter = (oMyDate) => {
@@ -990,7 +1065,7 @@ sap.ui.define([
             }
         },
         oContractAccountLinkPress: function (oEvent) {
-            debugger;
+            //debugger;
             var oSource = oEvent.getSource();
             let oContractAccount = oSource.getText();
             if (oContractAccount) {
