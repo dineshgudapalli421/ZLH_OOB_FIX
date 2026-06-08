@@ -21,12 +21,16 @@
     demandPopin="true"
     persistencyKey="SmartTableSoFormOOB"
     class="customSmartTableFontSize"
-    requestAtLeastFields="Updated,Validated,Reversed,Released,PRINTDOC,AMOUNT_DUE,AmountCalc,OOB_AMOUNT,VKONTO,CustomerName,Reason"
+    requestAtLeastFields="Updated,Validated,Reversed,Released,BatchId,PRINTDOC,PRINT_DATE,AMOUNT_DUE,AmountCalc,OOB_AMOUNT,VKONTO,CustomerName,Reason"
 >
     <Table
         id="idTableInvoices"
         rows="{
-                    path: '/OobTooldataSet'
+                    path: '/OobTooldataSet',
+                    sorter: {
+                        path: 'PRINTDOC',
+                        descending: false
+                    }
                 }"
         threshold="5"
         enableBusyIndicator="true"
@@ -89,7 +93,6 @@
             <Column
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Update"
             >
                 <m:Label text="Update" />
                 <template>
@@ -103,7 +106,6 @@
             <Column
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Validated"
             >
                 <m:Label text="Validated" />
                 <template>
@@ -117,7 +119,6 @@
             <Column                
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Reversed"
             >
                 <m:Label text="Reversed" />
                 <template>
@@ -131,7 +132,6 @@
             <Column
                 autoResizable="true"
                 width="3rem"
-                sortProperty="Released"
             >
                 <m:Label text="Released" />
                 <template>
@@ -153,11 +153,11 @@
                             <m:CheckBox selected="{OOBFixModel>Checkbox}" />
                         </template>
                     </Column> -->
-            <!-- <Column
+            <Column
                 autoResizable="true"
                 width="6rem"
                 hAlign="Center"
-                visible="true"
+                visible="false"
             >
                 <m:Label text="Batch ID" />
                 <template>
@@ -166,10 +166,9 @@
                         wrapping="false"
                     />
                 </template>
-            </Column> -->
+            </Column>
             <Column
             id="idInvoice"
-                sortProperty="Invoice"
                 autoResizable="true"
                 hAlign="Center"
                 width="7rem"
@@ -186,8 +185,7 @@
                     /> -->
                 </template>
             </Column>
-            <!-- <Column
-                sortProperty="PRINT_DATE"
+            <Column
                 autoResizable="true"
                 width="11rem"
                 hAlign="Center"
@@ -200,9 +198,8 @@
                         wrapping="false"
                     />
                 </template>
-            </Column> -->
+            </Column>
             <Column
-                sortProperty="Total Amount"
                 autoResizable="true"
                 width="5rem"
                 hAlign="End"
@@ -216,7 +213,6 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Tot amt calc"
                 autoResizable="true"
                 width="5rem"
                 hAlign="End"
@@ -230,7 +226,6 @@
                 </template>
             </Column>
             <Column
-            sortProperty="Difference"
                 autoResizable="true"
                 width="5rem"
                 hAlign="End"
@@ -245,7 +240,6 @@
             </Column>
             <Column
                 hAlign="End"
-                sortProperty="Contract Account"
                 autoResizable="true"
                 width="8rem"
             >
@@ -262,7 +256,6 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Customer Name"
                 autoResizable="true"
                 width="13rem"
             >
@@ -276,7 +269,6 @@
                 </template>
             </Column>
             <Column
-                sortProperty="Reason"
                 autoResizable="true"
                 width="28rem"
             >

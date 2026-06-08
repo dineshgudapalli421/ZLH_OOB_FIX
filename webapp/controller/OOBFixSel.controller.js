@@ -23,10 +23,12 @@ sap.ui.define([
 
             oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
-                //debugger;
+                debugger;
                 var oTable = oController.getView().byId("idTableInvoices");
                 var oModel = oController.getView().getModel("SelectionModel");
                 var oBinding = oTable.getBinding("rows");
+                // var oSorter = new sap.ui.model.Sorter("PRINTDOC", false);
+                // oBinding.sort(oSorter);
                 var iLength = oBinding.getLength();
                 //var oContexts = oBinding.getContexts(0, iLength);
                 var aItems = oBinding.getContexts(0, iLength).map(context => context.getObject());
@@ -35,6 +37,9 @@ sap.ui.define([
                     oModel.setProperty("/bPullListBtn", false);
                 }
                 else if (aItems.length > 0) {
+                    // aItems.sort(function (a, b) {
+                    //     return a.PRINTDOC - b.PRINTDOC;
+                    // });
                     bAllReleased = aItems.every(item => item.Released);
                     var Count = 0, pulllistCount = 0;
                     for (var i = 0; i < aItems.length; i++) {
@@ -83,7 +88,7 @@ sap.ui.define([
                                 oTable.setFirstVisibleRow(j);
                             }
                         }
-                    }else if (oSelectedInvoice === ''){
+                    } else if (oSelectedInvoice === '') {
                         oTable.clearSelection();
                     }
                 }
@@ -572,7 +577,7 @@ sap.ui.define([
                     oTable.setSelectedIndex(i);
                     oTable.setFirstVisibleRow(i);
                     //oTable.scrollToIndex(i); // Optional: Scroll to it
-                    break;
+                    //break;
                 }
             }
         },
@@ -643,12 +648,13 @@ sap.ui.define([
                     oModel.setProperty("/oView/InvoiceNumber", "Invoice# : " + oData.InvoiceNumber);
                     oModel.setProperty("/oView/InvoiceTotal", "Invoice Total(Head) : " + oData.InvoiceTotal);
                     oModel.setProperty("/oView/InvoiceTotalCalc", "Invoice Total(Calc) : " + oData.InvoiceTotalCalc);
-                    oController._refreshList();
-                    oController._fngetSelectedInvoice();
+
                     //debugger;
                     MessageBox.success(oData.MsgTxt
                         , {
                             onClose: function () {
+                                oController._refreshList();
+                                oController._fngetSelectedInvoice();
                                 if (sUserAction !== 'V' && sUserAction !== 'S') {
                                     oController._getServices(oController._oInvoiceNumber, oController._oAccountNumber, true);
                                 }
@@ -985,7 +991,7 @@ sap.ui.define([
             // oController._refreshList();
         },
         onSearch: function () {
-            //debugger;
+            debugger;
             oSelectedInvoice = '';
             var oBatchIdInput = this.getView().byId("idBatchIdInput");
             var oDateInput = this.getView().byId("idDateInput");
@@ -1016,7 +1022,7 @@ sap.ui.define([
             }
         },
         _refreshList: function () {
-            //debugger;
+            debugger;
             var oSelectionModel = oController.getView().getModel("SelectionModel");
             var sDate = oSelectionModel.getProperty("/oInvoiceDate");
             var sBatchId = oSelectionModel.getProperty("/sBatchId");
@@ -1043,6 +1049,8 @@ sap.ui.define([
             }
             oBinding.filter(oFilter);
             oBinding.refresh(true);
+            // var oSorter = new sap.ui.model.Sorter("PRINTDOC", false);
+            // oBinding.sort(oSorter);
         },
         oInvoiceLinkPress: function (oEvent) {
             var oSource = oEvent.getSource();
