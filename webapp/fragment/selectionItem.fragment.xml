@@ -15,12 +15,13 @@
     useVariantManagement="true"
     useTablePersonalisation="true"
     header="OOB Invoices"
-    showRowCount="true"
+    showRowCount="false"
     enableAutoBinding="true"
     enableExport="false"
     demandPopin="true"
     persistencyKey="SmartTableSoFormOOB"
     class="customSmartTableFontSize"
+    beforeRebindTable="onBeforeRebindTable"
     requestAtLeastFields="Updated,Validated,Reversed,Released,BatchId,PRINTDOC,PRINT_DATE,AMOUNT_DUE,AmountCalc,OOB_AMOUNT,VKONTO,CustomerName,Reason"
 >
     <Table
@@ -39,6 +40,7 @@
         fixedColumnCount="4" 
         class="myCustomSmallTable"
         rowSelectionChange=".onRowSelect"
+        sort=".onSortTable"
         rowHeight="20"
     >
     <rowMode>
@@ -155,7 +157,7 @@
                     </Column> -->
             <Column
                 autoResizable="true"
-                width="6rem"
+                width="5rem"
                 hAlign="Center"
                 visible="false"
             >
@@ -169,6 +171,7 @@
             </Column>
             <Column
             id="idInvoice"
+            sortProperty="PRINTDOC"
                 autoResizable="true"
                 hAlign="Center"
                 width="7rem"
@@ -187,7 +190,7 @@
             </Column>
             <Column
                 autoResizable="true"
-                width="11rem"
+                width="6rem"
                 hAlign="Center"
                 visible="false"
             >

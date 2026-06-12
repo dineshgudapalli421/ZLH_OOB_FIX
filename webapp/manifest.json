@@ -22,7 +22,8 @@
                 "settings": {
                     "annotations": [],
                     "localUri": "localService/mainService/metadata.xml",
-                    "odataVersion": "2.0"
+                    "odataVersion": "2.0",
+                    "defaultCountMode": "Inline"
                 }
             }
         }

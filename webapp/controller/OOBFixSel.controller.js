@@ -23,7 +23,7 @@ sap.ui.define([
 
             oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
-                debugger;
+                //debugger;
                 var oTable = oController.getView().byId("idTableInvoices");
                 var oModel = oController.getView().getModel("SelectionModel");
                 var oBinding = oTable.getBinding("rows");
@@ -33,13 +33,20 @@ sap.ui.define([
                 //var oContexts = oBinding.getContexts(0, iLength);
                 var aItems = oBinding.getContexts(0, iLength).map(context => context.getObject());
                 if (aItems.length === 0) {
+                    var oSmartTable = oController.getView().byId("oobSmartTable");
+                    oSmartTable.setHeader("OOB Invoices");
                     oModel.setProperty("/bReleaseBatchBtn", false);
                     oModel.setProperty("/bPullListBtn", false);
                 }
                 else if (aItems.length > 0) {
-                    // aItems.sort(function (a, b) {
-                    //     return a.PRINTDOC - b.PRINTDOC;
-                    // });
+                    var oSmartTable = oController.getView().byId("oobSmartTable");
+                    var oInnerTable = oSmartTable.getTable();
+                    var oBinding = oInnerTable.getBinding("items") || oInnerTable.getBinding("rows");
+                    if (oBinding) {
+                        var iTotalItems = oBinding.getLength();
+                        oSmartTable.setHeader("OOB Invoices(" + iTotalItems + ")");
+                    }
+
                     bAllReleased = aItems.every(item => item.Released);
                     var Count = 0, pulllistCount = 0;
                     for (var i = 0; i < aItems.length; i++) {
@@ -109,6 +116,14 @@ sap.ui.define([
             oController._fndefaultBatch();
         },
 
+        onBeforeRebindTable: function (oEvent) {
+            //debugger;
+            var oSmartTable = this.byId("oobSmartTable");
+            var oInnerTable = oSmartTable.getTable();
+            if (oSmartTable) {
+                oSmartTable.rebindTable(true);
+            }            
+        },
         _restoreSelection: function (oEvent) {
             if (!this._sSelectedKey) {
                 return; // Nothing was selected previously
@@ -539,9 +554,14 @@ sap.ui.define([
             }
         },
         _fngetIsReleased: function () {
+            //debugger;
             this._sSelectedKey = null;
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
+            if (sSelectedIndex === -1) {
+                // return MessageBox.error("Please select any one of the row and proceed...");
+                return "Please select any one of the row and proceed...";
+            }
             if (sSelectedIndex !== -1) {
                 var oContext = oTable.getContextByIndex(sSelectedIndex);
                 if (oContext) {
@@ -558,9 +578,14 @@ sap.ui.define([
                 var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
                 //debugger;
                 if (oData.Reversed || oData.Released) {
-                    MessageToast.show("Invoice is already Reversed or Released");
-                    return;
+                    // return MessageBox.error("Invoice is already Reversed or Released");
+                    return "Invoice is already Reversed or Released";
                 }
+                else {
+                    return "";
+                }
+            } else {
+                return "";
             }
         },
         _fngetSelectedInvoice: function () {
@@ -582,8 +607,14 @@ sap.ui.define([
             }
         },
         onPressValidate: function () {
-            oController._fngetIsReleased();
-            oController._fnCreateCall("V");
+            //debugger;
+            var oMessage = oController._fngetIsReleased();
+            if (oMessage === '') {
+                oController._fnCreateCall("V");
+            }
+            else if (oMessage !== '') {
+                MessageBox.error(oMessage);
+            }
             // oController._refreshList();
             //oController._fngetSelectedInvoice();
             // var oTable = this.getView().byId("idTableInvoices");
@@ -591,22 +622,33 @@ sap.ui.define([
             // oTable.setFirstVisibleRow(objSelectedIndex);
         },
         onPressSave: function () {
-            oController._fngetIsReleased();
-            oController._fnCreateCall("S");
-            oController._refreshList();
+            var oMessage = oController._fngetIsReleased();
+            if (oMessage === '') {
+                oController._fnCreateCall("S");
+            }
+            else if (oMessage !== '') {
+                MessageBox.error(oMessage);
+            }
+            // oController._fngetIsReleased();
+            // oController._fnCreateCall("S");
+            // oController._refreshList();
             //oController._fngetSelectedInvoice();
             // var oTable = this.getView().byId("idTableInvoices");
             // oTable.setSelectedIndex(objSelectedIndex);
             // oTable.setFirstVisibleRow(objSelectedIndex);            
         },
         onPressReverseValidate: function () {
-            oController._fngetIsReleased();
-            oController._fnCreateCall("U");
-            oController._refreshList();
-            //oController._fngetSelectedInvoice();
-            // var oTable = this.getView().byId("idTableInvoices");
-            // oTable.setSelectedIndex(objSelectedIndex);
-            // oTable.setFirstVisibleRow(objSelectedIndex);
+            var oMessage = oController._fngetIsReleased();
+            if (oMessage === '') {
+                oController._fnCreateCall("U");
+            }
+            else if (oMessage !== '') {
+                MessageBox.error(oMessage);
+            }
+            // oController._fngetIsReleased();
+            // oController._fnCreateCall("U");
+            // oController._refreshList();
+
         },
         onPressRealod: function () {
             oController._fngetIsReleased();
@@ -614,6 +656,12 @@ sap.ui.define([
         },
         _fnCreateCall: function (sUserAction) {
             var oModel = oController.getView().getModel("OOBFixModel");
+            if (oController.getView().byId("idSelInvoiceTotal").getText() === '') {
+                return MessageBox.error("Please select row and proceed...");
+            }
+            if (oController._oInvoiceNumber !== oSelectedInvoice) {
+                return MessageBox.error("Selected Row and below proceed Invoice are different");
+            }
             var payload = oController._getPayload(sUserAction);
             var aSummaryList = oModel.getProperty("/aSummaryItemsList");
             oDataModel.create("/InvoiceHeaderSet", payload, {
@@ -991,7 +1039,7 @@ sap.ui.define([
             // oController._refreshList();
         },
         onSearch: function () {
-            debugger;
+            //debugger;
             oSelectedInvoice = '';
             var oBatchIdInput = this.getView().byId("idBatchIdInput");
             var oDateInput = this.getView().byId("idDateInput");
@@ -1022,7 +1070,7 @@ sap.ui.define([
             }
         },
         _refreshList: function () {
-            debugger;
+            //debugger;
             var oSelectionModel = oController.getView().getModel("SelectionModel");
             var sDate = oSelectionModel.getProperty("/oInvoiceDate");
             var sBatchId = oSelectionModel.getProperty("/sBatchId");
@@ -1134,6 +1182,7 @@ sap.ui.define([
                 });
         },
         getViewSettingsDialog: function (sDialogFragmentName) {
+            //debugger;
             var pDialog = oController._mViewSettingsDialogs[sDialogFragmentName];
 
             if (!pDialog) {
@@ -1152,6 +1201,7 @@ sap.ui.define([
             return pDialog;
         },
         handleSortDialogConfirm: function (oEvent) {
+            //debugger;
             var oTable = oController.getView().byId("idTableInvoices"),
                 mParams = oEvent.getParameters(),
                 oBinding = oTable.getBinding("rows"),
@@ -1172,5 +1222,14 @@ sap.ui.define([
             oTable.sort(oInvoiceColumn, this._bSortColumnDescending ? SortOrder.Descending : SortOrder.Ascending, /*extend existing sorting*/true);
             this._bSortColumnDescending = !this._bSortColumnDescending;
         },
+        onSortTable: function (oEvent) {
+            //debugger;
+            var oColumn = oEvent.getParameter("column");
+            var sSortProperty = oColumn.getSortProperty();
+            var sSortOrder = oEvent.getParameter("sortOrder");
+            if (sSortOrder === "Ascending") {
+
+            }
+        }
     });
 });
