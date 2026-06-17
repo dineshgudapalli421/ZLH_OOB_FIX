@@ -21,7 +21,7 @@ sap.ui.define([
             oRouter = oController.getOwnerComponent().getRouter();
             oDataModel = oController.getOwnerComponent().getModel();
 
-            oRouter.attachRouteMatched(this._onRouteMatched, this);
+            //oRouter.attachRouteMatched(this._onRouteMatched, this);
             oDataModel.attachBatchRequestCompleted(function () {
                 //debugger;
                 var oTable = oController.getView().byId("idTableInvoices");
@@ -122,7 +122,7 @@ sap.ui.define([
             var oInnerTable = oSmartTable.getTable();
             if (oSmartTable) {
                 oSmartTable.rebindTable(true);
-            }            
+            }
         },
         _restoreSelection: function (oEvent) {
             if (!this._sSelectedKey) {
@@ -1142,10 +1142,20 @@ sap.ui.define([
             }
         },
         onExport: function (oEvent) {
+            //debugger;
             var oTable = this.getView().byId("idTableInvoices");
             var oRowBinding = oTable.getBinding("rows");
             var aColumns = oTable.getColumns();
-
+            var aContexts = oRowBinding.getContexts(0, oRowBinding.getLength());
+            var oLocalData = aContexts.map(function (oContext) {
+                //debugger;
+                var oRowData = Object.assign({}, oContext.getObject());
+                oRowData.Updated = (oRowData.Updated === true || oRowData.Updated === 'true') ? 'X' : '';
+                oRowData.Validated = (oRowData.Validated === true || oRowData.Validated === 'true') ? 'X' : '';
+                oRowData.Reversed = (oRowData.Reversed === true || oRowData.Reversed === 'true') ? 'X' : '';
+                oRowData.Released = (oRowData.Released === true || oRowData.Released === 'true') ? 'X' : '';
+                return oRowData;
+            });
             // 1. Define Column Configuration
             var aExportConfig = aColumns.map(function (oColumn) {
                 var sLabel = oColumn.getLabel().getText();
@@ -1156,18 +1166,34 @@ sap.ui.define([
                 if (oTemplate && oTemplate.getBindingPath("text")) {
                     sPath = oTemplate.getBindingPath("text");
                 }
-
-                return {
-                    label: sLabel,
-                    property: sPath,
-                    type: "String" // or Date, Number, Boolean, etc.
-                };
+                if (sLabel === 'Update' || sLabel === 'Validated' || sLabel === 'Reversed' || sLabel === 'Released') {
+                    sPath = sLabel === 'Update' ? 'Updated' : sLabel;
+                    return {
+                        label: sLabel,
+                        property: sPath,
+                        type: "String"
+                    };
+                }
+                else if (sLabel === 'Print dt') {
+                    return {
+                        label: sLabel,
+                        property: sPath,
+                        type: "Date" // or Date, Number, Boolean, etc.
+                    };
+                }
+                else {
+                    return {
+                        label: sLabel,
+                        property: sPath,
+                        type: "String" // or Date, Number, Boolean, etc.
+                    };
+                }
             });
 
             // 2. Configure Settings
             var oSettings = {
-                workbook: { columns: aExportConfig },
-                dataSource: oRowBinding, // Uses table's binding (supports filtering/sorting)
+                workbook: { columns: aExportConfig, sheetName: "Invoices" },
+                dataSource: oLocalData, //oRowBinding, // Uses table's binding (supports filtering/sorting)
                 fileName: "OOBInvoices.xlsx"
             };
 
