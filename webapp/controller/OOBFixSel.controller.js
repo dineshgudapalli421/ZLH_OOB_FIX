@@ -33,10 +33,12 @@ sap.ui.define([
                 //var oContexts = oBinding.getContexts(0, iLength);
                 var aItems = oBinding.getContexts(0, iLength).map(context => context.getObject());
                 if (aItems.length === 0) {
+                    let pullCount = 0;
                     var oSmartTable = oController.getView().byId("oobSmartTable");
                     oSmartTable.setHeader("OOB Invoices");
-                    oModel.setProperty("/bReleaseBatchBtn", false);
-                    oModel.setProperty("/bPullListBtn", false);
+                    oModel.setProperty("/bReleaseBatchBtn", true);
+                    oModel.setProperty("/bPullListBtn", true);
+                    oController._refreshFooter(pullCount);
                 }
                 else if (aItems.length > 0) {
                     var oSmartTable = oController.getView().byId("oobSmartTable");
@@ -214,14 +216,6 @@ sap.ui.define([
                 }
                 if (oData) {
                     oSelectedInvoice = oData.PRINTDOC;
-                    // oController._oInvoiceNumber = oData.PRINTDOC;
-                    // oController._oAccountNumber = oData.VKONTO;
-                    // oController._modelInit();
-                    // oController._getSummaryItems().then(() => {
-                    //     return oController._getServices(oData.PRINTDOC, oData.VKONTO);
-                    // }).catch((error) => {
-                    //     MessageBox.error("Error occurred: " + error.message);
-                    // });
                 }
             }
         },
@@ -285,7 +279,7 @@ sap.ui.define([
                     success: (oData) => {
                         if (oData.results.length) {
                             oData.results.forEach(item => {
-                                item.IsbEnable = item.FIELD_ID !== "OU" && item.FIELD_ID !== "HS";
+                                item.IsbEnable = item.FIELD_ID !== "OU" && item.FIELD_ID !== "HS" && !item.FIELD_ID.includes("T29_");
                             });
                             oModel.setProperty("/aSummaryItemsList", oData.results);
                             resolve();
@@ -329,6 +323,14 @@ sap.ui.define([
                                 // Find and override the SCREEN_FIELD in aSummaryList
                                 aSummaryList.forEach(summaryItem => {
                                     if (summaryItem.FIELD_ID === 'HS') {
+                                        summaryItem.SCREEN_FIELD = item.ScreenField;
+                                    }
+                                });
+                            }
+                            if (item.FieldId.includes("T29_")) {
+                                // Find and override the SCREEN_FIELD in aSummaryList
+                                aSummaryList.forEach(summaryItem => {
+                                    if (summaryItem.FIELD_ID.includes(item.FieldId)) {
                                         summaryItem.SCREEN_FIELD = item.ScreenField;
                                     }
                                 });
@@ -683,6 +685,16 @@ sap.ui.define([
                                 if (summaryItem.FIELD_ID === 'HS') {
                                     summaryItem.SCREEN_FIELD = item.ScreenField;
                                 }
+
+                            });
+                        }
+                        if (item.FieldId === 'T29') {
+                            // Find and override the SCREEN_FIELD in aSummaryList
+                            aSummaryList.forEach(summaryItem => {
+                                if (summaryItem.FIELD_ID === 'T29') {
+                                    summaryItem.SCREEN_FIELD = item.ScreenField;
+                                }
+
                             });
                         }
                     });
@@ -872,42 +884,49 @@ sap.ui.define([
                 var sPath = oContexts[0].getPath();
                 var oData = oContexts[0].getModel().getProperty(sPath);
                 if (oData.Released) {
-                    MessageToast.show("Batch is already Released");
+                    // MessageToast.show("Batch is already Released");
+                    MessageBox.error("Batch is already released");
                     return;
                 }
                 // Display BatchId information before proceeding
-                var sBatchId = oBatchId;// oData.BatchId;
-                MessageBox.confirm("Batch ID: " + sBatchId + "\nDo you want to proceed with the release?", {
-                    onClose: function (oAction) {
-                        if (oAction === MessageBox.Action.OK) {
-                            var sUrl = "/GetFixInvData?BatchId=" + sBatchId;
-                            oDataModel.callFunction("/GetFixInvData",
-                                {
-                                    method: "GET",
-                                    urlParameters: { "BatchId": sBatchId },
-                                    success: function (oData, response) {
-                                        MessageToast.show("Batch released successfully");
-                                        oModel.setProperty("/IsReleased", false);
-                                        oController._refreshList();
-                                    },
-                                    error: function (oError) {
-                                        var oMessage;
-                                        if (oError.responseText.startsWith("<")) {
-                                            var parser = new DOMParser();
-                                            var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
-                                            oMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
-                                        } else {
-                                            var oResponseText = oError.responseText;
-                                            var sParsedResponse = JSON.parse(oResponseText);
-                                            oMessage = sParsedResponse.error.message.value;
-                                        }
-                                        MessageBox.error(oMessage);
-                                    }
-                                });
-                        }
-                    }
-                });
+
             }
+            if (oBatchId === '') {
+                MessageToast.show("Batch is Mandatory");
+                return;
+            }
+            var sBatchId = oBatchId;// oData.BatchId;
+            MessageBox.confirm("Batch ID: " + sBatchId + "\nDo you want to proceed with the release?", {
+                onClose: function (oAction) {
+                    if (oAction === MessageBox.Action.OK) {
+                        var sUrl = "/GetFixInvData?BatchId=" + sBatchId;
+                        oDataModel.callFunction("/GetFixInvData",
+                            {
+                                method: "GET",
+                                urlParameters: { "BatchId": sBatchId },
+                                success: function (oData, response) {
+                                    MessageBox.success("Batch has been released successfully.");
+                                    //MessageToast.show("Batch has been released");
+                                    oModel.setProperty("/IsReleased", false);
+                                    oController._refreshList();
+                                },
+                                error: function (oError) {
+                                    var oMessage;
+                                    if (oError.responseText.startsWith("<")) {
+                                        var parser = new DOMParser();
+                                        var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
+                                        oMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+                                    } else {
+                                        var oResponseText = oError.responseText;
+                                        var sParsedResponse = JSON.parse(oResponseText);
+                                        oMessage = sParsedResponse.error.message.value;
+                                    }
+                                    MessageBox.error(oMessage);
+                                }
+                            });
+                    }
+                }
+            });
         },
 
         _onPullList: function () {

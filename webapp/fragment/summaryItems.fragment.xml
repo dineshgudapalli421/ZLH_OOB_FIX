@@ -25,11 +25,12 @@
                     />
                 </template>
             </Column>
-            <Column width="16rem">
+            <Column width="100%">
                 <m:Label text="Items" class="customLabelFontSize"/>
                 <template>
                     <!-- <m:Label text="{OOBFixModel>ScreenField}" /> -->
                     <m:Select
+                        width="100%"
                         enabled="{/Enabled}"
                         editable="{OOBFixModel>Editable}"
                         forceSelection="false"

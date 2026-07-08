@@ -64,7 +64,7 @@
                                 height="100%"
                             >
                             <layoutData>
-                <l:SplitterLayoutData size="500px" minSize="150px" resizable="true" />
+                <l:SplitterLayoutData size="620px" minSize="150px" resizable="true" />
             </layoutData>
                                 <headerToolbar>
                                     <OverflowToolbar>
