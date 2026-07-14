@@ -11,7 +11,7 @@ sap.ui.define([
     "sap/ui/core/library"
 ], (Controller, Filter, FilterOperator, formatter, MessageBox, MessageToast, Spreadsheet, Sorter, Fragment, CoreLibrary) => {
     "use strict";
-    var oController, oRouter, oDataModel, oBatchId = '', bAllReleased;
+    var oController, oRouter, oDataModel, oBatchId = '', bAllReleased, oFlag = false;
     var objSelectedIndex, oSelectedInvoice;
     const SortOrder = CoreLibrary.SortOrder;
     return Controller.extend("com.sap.lh.mr.zlhoobfix.controller.OOBFixSel", {
@@ -88,14 +88,32 @@ sap.ui.define([
                         //oModel.setProperty("/bPullListBtn", bAllReleased);
                     }
                     if (oSelectedInvoice !== '') {
+                        let oSelectedIndex = '';
                         for (var j = 0; j < aItems.length; j++) {
                             var aSelectedInvoice = aItems[j].PRINTDOC;
 
                             // Change "ColumnPropertyName" to your actual OData/JSON property name
                             if (aSelectedInvoice === oSelectedInvoice) {
+                                oSelectedIndex = j;
                                 oTable.setSelectedIndex(j);
                                 oTable.setFirstVisibleRow(j);
                             }
+                        }
+                        if (oFlag) {
+                            oFlag = false;
+                            if (aItems[oSelectedIndex].Reversed) {
+                                MessageToast.show("Invoice is already Reversed");
+                                oController._modelInit();
+                                return;
+                            }
+                            oController._oInvoiceNumber = aItems[oSelectedIndex].PRINTDOC;
+                            oController._oAccountNumber = aItems[oSelectedIndex].VKONTO;
+                            oController._modelInit();
+                            oController._getSummaryItems().then(() => {
+                                return oController._getServices(aItems[oSelectedIndex].PRINTDOC, aItems[oSelectedIndex].VKONTO);
+                            }).catch((error) => {
+                                MessageBox.error("Error occurred: " + error.message);
+                            });
                         }
                     } else if (oSelectedInvoice === '') {
                         oTable.clearSelection();
@@ -212,6 +230,7 @@ sap.ui.define([
 
                 if (oData.Reversed) {
                     MessageToast.show("Invoice is already Reversed");
+                    oController._modelInit();
                     return;
                 }
                 if (oData) {
@@ -224,33 +243,42 @@ sap.ui.define([
             var oTable = this.getView().byId("idTableInvoices");
             var sSelectedIndex = oTable.getSelectedIndex();
             if (sSelectedIndex !== -1) {
-                var oBinding = oTable.getBinding("rows");
-                var iLength = oBinding.getLength();
-                var oContexts = oBinding.getContexts(0, iLength);
-                //var oContexts = oTable.getBinding('rows').getContexts();
-                var sPath = oContexts[sSelectedIndex].getPath();
-                var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
-                //debugger;
-                if (oData.Reversed) {
-                    MessageToast.show("Invoice is already Reversed");
-                    return;
-                }
-                if (oData) {
-                    //debugger;
-                    oController._oInvoiceNumber = oData.PRINTDOC;
-                    oController._oAccountNumber = oData.VKONTO;
-                    oController._modelInit();
-                    oController._getSummaryItems().then(() => {
-                        return oController._getServices(oData.PRINTDOC, oData.VKONTO);
-                    }).catch((error) => {
-                        MessageBox.error("Error occurred: " + error.message);
-                    });
-                    // oRouter.navTo("OOBFix", {
-                    //     invoice: oData.PRINTDOC,
-                    //     contractAccount: oData.VKONTO,
-                    //     Release: oData.Released
-                    // });
-                }
+                objSelectedIndex = sSelectedIndex;
+                oSelectedInvoice = oTable.getContextByIndex(sSelectedIndex).getProperty("PRINTDOC");
+
+                var oBatchIdInput = this.getView().byId("idBatchIdInput");
+                oBatchId = oBatchIdInput.getValue();
+                oController._refreshList();
+                oController._fngetSelectedInvoice();
+                oFlag = true;
+
+                // var oBinding = oTable.getBinding("rows");
+                // var iLength = oBinding.getLength();
+                // var oContexts = oBinding.getContexts(0, iLength);
+                // //var oContexts = oTable.getBinding('rows').getContexts();
+                // var sPath = oContexts[sSelectedIndex].getPath();
+                // var oData = oContexts[sSelectedIndex].getModel().getProperty(sPath);
+                // //debugger;
+                // if (oData.Reversed) {
+                //     MessageToast.show("Invoice is already Reversed");
+                //     return;
+                // }
+                // if (oData) {
+                //     //debugger;
+                //     oController._oInvoiceNumber = oData.PRINTDOC;
+                //     oController._oAccountNumber = oData.VKONTO;
+                //     oController._modelInit();
+                //     oController._getSummaryItems().then(() => {
+                //         return oController._getServices(oData.PRINTDOC, oData.VKONTO);
+                //     }).catch((error) => {
+                //         MessageBox.error("Error occurred: " + error.message);
+                //     });
+                //     // oRouter.navTo("OOBFix", {
+                //     //     invoice: oData.PRINTDOC,
+                //     //     contractAccount: oData.VKONTO,
+                //     //     Release: oData.Released
+                //     // });
+                // }
             } else {
                 MessageToast.show("Please Select Line Item");
             }
@@ -279,7 +307,7 @@ sap.ui.define([
                     success: (oData) => {
                         if (oData.results.length) {
                             oData.results.forEach(item => {
-                                item.IsbEnable = item.FIELD_ID !== "OU" && item.FIELD_ID !== "HS" && !item.FIELD_ID.includes("T29_");
+                                item.IsbEnable = item.FIELD_ID !== "OU" && item.FIELD_ID !== "HS" && !item.FIELD_ID.includes("T29");
                             });
                             oModel.setProperty("/aSummaryItemsList", oData.results);
                             resolve();
@@ -327,7 +355,7 @@ sap.ui.define([
                                     }
                                 });
                             }
-                            if (item.FieldId.includes("T29_")) {
+                            if (item.FieldId.includes("T29")) {
                                 // Find and override the SCREEN_FIELD in aSummaryList
                                 aSummaryList.forEach(summaryItem => {
                                     if (summaryItem.FIELD_ID.includes(item.FieldId)) {
@@ -895,35 +923,46 @@ sap.ui.define([
                 MessageToast.show("Batch is Mandatory");
                 return;
             }
-            var sBatchId = oBatchId;// oData.BatchId;
-            MessageBox.confirm("Batch ID: " + sBatchId + "\nDo you want to proceed with the release?", {
+            var sBatchId = oBatchId;// oData.BatchId; Batch ID: " + sBatchId + "\nDo you want to proceed with the release?
+            MessageBox.information("Have you worked through the First Bill Validations?", {
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                 onClose: function (oAction) {
-                    if (oAction === MessageBox.Action.OK) {
-                        var sUrl = "/GetFixInvData?BatchId=" + sBatchId;
-                        oDataModel.callFunction("/GetFixInvData",
-                            {
-                                method: "GET",
-                                urlParameters: { "BatchId": sBatchId },
-                                success: function (oData, response) {
-                                    MessageBox.success("Batch has been released successfully.");
-                                    //MessageToast.show("Batch has been released");
-                                    oModel.setProperty("/IsReleased", false);
-                                    oController._refreshList();
-                                },
-                                error: function (oError) {
-                                    var oMessage;
-                                    if (oError.responseText.startsWith("<")) {
-                                        var parser = new DOMParser();
-                                        var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
-                                        oMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
-                                    } else {
-                                        var oResponseText = oError.responseText;
-                                        var sParsedResponse = JSON.parse(oResponseText);
-                                        oMessage = sParsedResponse.error.message.value;
-                                    }
-                                    MessageBox.error(oMessage);
+                    if (oAction === MessageBox.Action.YES) {
+                        MessageBox.confirm("Batch ID: " + sBatchId + "\nDo you want to proceed with the release?", {
+                            actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                            onClose: function (aAction) {
+                                if (aAction === MessageBox.Action.YES) {
+                                    var sUrl = "/GetFixInvData?BatchId=" + sBatchId;
+                                    oDataModel.callFunction("/GetFixInvData",
+                                        {
+                                            method: "GET",
+                                            urlParameters: { "BatchId": sBatchId },
+                                            success: function (oData, response) {
+                                                MessageBox.success("Batch has been released successfully.");
+                                                //MessageToast.show("Batch has been released");
+                                                oModel.setProperty("/IsReleased", false);
+                                                oController._refreshList();
+                                            },
+                                            error: function (oError) {
+                                                var oMessage;
+                                                if (oError.responseText.startsWith("<")) {
+                                                    var parser = new DOMParser();
+                                                    var xmlDoc = parser.parseFromString(oError.responseText, "text/xml");
+                                                    oMessage = xmlDoc.getElementsByTagName("message")[0].childNodes[0].nodeValue;
+                                                } else {
+                                                    var oResponseText = oError.responseText;
+                                                    var sParsedResponse = JSON.parse(oResponseText);
+                                                    oMessage = sParsedResponse.error.message.value;
+                                                }
+                                                MessageBox.error(oMessage);
+                                            }
+                                        });
                                 }
-                            });
+                            }
+                        });
+
+                    } else {
+                        //MessageBox.information("Pop up for first bill validation at the time of release.")
                     }
                 }
             });
